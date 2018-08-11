@@ -9,13 +9,13 @@ TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
 USER_NAME = '***REMOVED***'
 PASSWORD = '***REMOVED***'
 
+
 def main():
     # create a session
     session = requests.session()
 
     # Login
-    login_content = login(session, LOGIN_URL, USER_NAME, PASSWORD)
-    # print(login_content)
+    login(session, LOGIN_URL, USER_NAME, PASSWORD)
 
     # Get team content
     team_content = get_page_content(session, TEAM_URL)
@@ -39,22 +39,27 @@ def login(session, url, username, password):
     # print(login_response.cookies['sdtl'])
     return login_response.content
 
+
 def get_page_content(session, url):
     page = session.get(url)
     return page.content
+
 
 def get_soup(content):
     # get parse-able version
     soup = BeautifulSoup(content, 'html.parser')
     return soup
 
+
 def get_rows(soup):
     # pull out table
     rows = soup.select('tr.even, tr.odd')
     return rows
 
+
 def get_team_name(soup):
     name = soup.find()
+
 
 if __name__ == '__main__':
     main()
