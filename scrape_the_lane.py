@@ -50,7 +50,7 @@ def get_soup(content):
 
 def get_rows(soup):
     # pull out table
-    rows = soup.select('td > a.player ~ tr')
+    rows = soup.select('tr.even, tr.odd')
     return rows
 
 def get_team_name(soup):
