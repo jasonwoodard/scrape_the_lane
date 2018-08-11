@@ -26,4 +26,10 @@ class TeamPlayerScraper:
 
     @staticmethod
     def _extract_player_row(row):
-        return player_object.Player(row)
+        player = player_object.Player(row)
+        # Assume row is tr.even or tr.odd from player table with the following cells
+        # Name	Yr	Ht	Pos		Gms	Min	FG	FG%	3P	3P%	FT	FT%	OR	DR	TR	Ast	Stl	Blk	TO	PF	+/-	Pts
+        cells = row.find_all('td')
+        player.name = cells[0].contents
+        player.year = cells[1].contents
+        return player

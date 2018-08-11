@@ -22,6 +22,8 @@ def main():
     for p in players:
         print('------------ROW------------')
         print(p.row)
+        print('------------VALUES------------')
+        print(p.name, p.year)
 
 
 def get_page_content(session, url):
