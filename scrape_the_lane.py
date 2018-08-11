@@ -1,5 +1,5 @@
 import requests
-import lane_scraper
+import team_player_scraper
 
 from bs4 import BeautifulSoup
 
@@ -11,33 +11,17 @@ PASSWORD = '***REMOVED***'
 
 
 def main():
-    # create a session
-    session = requests.session()
-
-    # Login
-    login(session, LOGIN_URL, USER_NAME, PASSWORD)
+    session = get_session()
 
     # Get team content
     team_content = get_page_content(session, TEAM_URL)
 
-    team_soup = get_soup(team_content)
-    team_soup.prettify()
-    # print(team_soup)
+    scraper = team_player_scraper.TeamPlayerScraper(team_content)
+    players = scraper.get_team_player_data()
 
-    rows = get_rows(team_soup)
-
-    for row in rows:
-        print('---------ROW----------')
-        print(row)
-    # turn table into CSV
-
-
-def login(session, url, username, password):
-    payload = {'user': username, 'pass': password, 'login' : '1'}
-    login_response = session.post(url, data=payload)
-    # print(login_response.cookies['vdtl'])
-    # print(login_response.cookies['sdtl'])
-    return login_response.content
+    for p in players:
+        print('------------ROW------------')
+        print(p.row)
 
 
 def get_page_content(session, url):
@@ -45,20 +29,18 @@ def get_page_content(session, url):
     return page.content
 
 
-def get_soup(content):
-    # get parse-able version
-    soup = BeautifulSoup(content, 'html.parser')
-    return soup
+def login(session, url, username, password):
+    payload = {'user': username, 'pass': password, 'login': '1'}
+    login_response = session.post(url, data=payload)
+    return login_response.content
 
 
-def get_rows(soup):
-    # pull out table
-    rows = soup.select('tr.even, tr.odd')
-    return rows
-
-
-def get_team_name(soup):
-    name = soup.find()
+def get_session():
+    # create a session
+    session = requests.session()
+    # Login
+    login(session, LOGIN_URL, USER_NAME, PASSWORD)
+    return session
 
 
 if __name__ == '__main__':
