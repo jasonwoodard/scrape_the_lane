@@ -1,13 +1,13 @@
 import requests
 import team_player_scraper
-
+import pprint
 from argparse import ArgumentParser
 
 
 LOGIN_URL = 'http://drivethelane.com/'
 TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
 
-
+pprint = pprint.PrettyPrinter()
 
 def main(args):
 
@@ -23,8 +23,7 @@ def main(args):
         print('------------ROW------------')
         print(p.row)
         print('------------VALUES------------')
-        print(p.name, p.year)
-
+        print(p.name, p.year, p.height, p.position, p.games)
 
 def get_page_content(session, url):
     page = session.get(url)
@@ -47,7 +46,7 @@ def get_session(username, password):
 
 parser = ArgumentParser()
 parser.add_argument("-u", "--user", dest="username", default=True,
-                    help="You need to provide a username", metavar="USERNAME")
+                    help="You need to provide a username")
 parser.add_argument("-p", "--pass", dest="password", default=True,
                     help="You need to provide a password")
 

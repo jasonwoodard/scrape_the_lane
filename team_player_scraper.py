@@ -30,6 +30,10 @@ class TeamPlayerScraper:
         # Assume row is tr.even or tr.odd from player table with the following cells
         # Name	Yr	Ht	Pos		Gms	Min	FG	FG%	3P	3P%	FT	FT%	OR	DR	TR	Ast	Stl	Blk	TO	PF	+/-	Pts
         cells = row.find_all('td')
-        player.name = cells[0].contents
-        player.year = cells[1].contents
+        player.name = cells[0].contents[0]
+        player.year = cells[1].contents[0]
+        player.height = cells[2].contents[0]
+        player.position = cells[3].contents[0]
+        player.games = cells[4]
+        player.min = cells[5].contents[0]
         return player
