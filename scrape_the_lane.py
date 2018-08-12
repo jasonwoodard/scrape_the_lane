@@ -1,17 +1,17 @@
 import requests
 import team_player_scraper
 
-from bs4 import BeautifulSoup
+from argparse import ArgumentParser
+
 
 LOGIN_URL = 'http://drivethelane.com/'
 TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
 
-USER_NAME = '***REMOVED***'
-PASSWORD = '***REMOVED***'
 
 
-def main():
-    session = get_session()
+def main(args):
+
+    session = get_session(args.username, args.password)
 
     # Get team content
     team_content = get_page_content(session, TEAM_URL)
@@ -37,13 +37,21 @@ def login(session, url, username, password):
     return login_response.content
 
 
-def get_session():
+def get_session(username, password):
     # create a session
     session = requests.session()
     # Login
-    login(session, LOGIN_URL, USER_NAME, PASSWORD)
+    login(session, LOGIN_URL, username, password)
     return session
 
 
+parser = ArgumentParser()
+parser.add_argument("-u", "--user", dest="username", default=True,
+                    help="You need to provide a username", metavar="USERNAME")
+parser.add_argument("-p", "--pass", dest="password", default=True,
+                    help="You need to provide a password")
+
+args = parser.parse_args()
+
 if __name__ == '__main__':
-    main()
+    main(args)
