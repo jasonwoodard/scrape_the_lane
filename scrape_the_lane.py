@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 LOGIN_URL = 'http://drivethelane.com/'
 TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
 
-pprint = pprint.PrettyPrinter()
+pp = pprint.PrettyPrinter()
 
 def main(args):
 
@@ -22,8 +22,8 @@ def main(args):
     for p in players:
         print('------------ROW------------')
         print(p.row)
-        print('------------VALUES------------')
-        print(p.name, p.year, p.height, p.position, p.games)
+        # print('------------VALUES------------')
+        # pp.pprint(p)
 
 def get_page_content(session, url):
     page = session.get(url)
