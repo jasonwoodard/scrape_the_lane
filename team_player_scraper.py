@@ -34,6 +34,7 @@ class TeamPlayerScraper:
         player.year = cells[1].contents[0]
         player.height = cells[2].contents[0]
         player.position = cells[3].contents[0]
-        player.games = cells[4]
-        player.min = cells[5].contents[0]
+        player.games = cells[5]
+        player.min = cells[6].contents[0]
+        player.
         return player
