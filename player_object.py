@@ -28,7 +28,7 @@ class Player:
     @staticmethod
     def get_row_template():
         return """
-            {{#rows}}
-                {{id}}, {{name}}, {{year}}, {{height}}, {{position}}, {{games}}, {{min}}, {{fg}}, {{fg_pct}}, {{three_p}}, {{three_p_pct}}, {{offense_rating}}, {{defense_rating}}, {{tr}}, {{ast}}, {{stl}}, {{blk}}, {{to}}, {{pf}}, {{plus_minus}}, {{pts}}
-            {{/rows}}
+          {{#rows}}
+            {{id}}, {{name}}, {{year}}, {{height}}, {{position}}, {{games}}, {{min}}, {{fg}}, {{fg_pct}}, {{three_p}}, {{three_p_pct}}, {{offense_rating}}, {{defense_rating}}, {{tr}}, {{ast}}, {{stl}}, {{blk}}, {{to}}, {{pf}}, {{plus_minus}}, {{pts}}
+          {{/rows}}
         """

@@ -1,4 +1,6 @@
 import requests
+
+import data_exporter
 import team_player_scraper
 import pprint
 from argparse import ArgumentParser
@@ -19,11 +21,16 @@ def main(args):
     scraper = team_player_scraper.TeamPlayerScraper(team_content)
     players = scraper.get_team_player_data()
 
-    for p in players:
-        print('------------ROW------------')
-        print(p.row)
+    # for p in players:
+        # print('------------ROW------------')
+        # print(p.row)
         # print('------------VALUES------------')
         # pp.pprint(p)
+
+    value = {'rows': players}
+    exporter = data_exporter.DataExporter()
+    exporter.export_to_csv(players[0].row_template, value)
+
 
 def get_page_content(session, url):
     page = session.get(url)
