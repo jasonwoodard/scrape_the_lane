@@ -1,9 +1,9 @@
 import pystache
 
 
-class DataExporter:
+class DataExporter(object):
     def __init__(self):
-        self.templates ={}
+        pass
 
     def export_to_csv(self, template, players):
         print pystache.render(template, players)

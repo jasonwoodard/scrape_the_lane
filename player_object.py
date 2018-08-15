@@ -1,5 +1,12 @@
 
-class Player:
+class Player(object):
+
+    RowTemplate = '''
+    {{#rows}}
+        {{id}}, {{name}}, {{year}}, {{height}}, {{position}}, {{games}}, {{min}}, {{fg}}, {{fg_pct}}, {{three_p}}, {{three_p_pct}}, {{offense_rating}}, {{defense_rating}}, {{tr}}, {{ast}}, {{stl}}, {{blk}}, {{to}}, {{pf}}, {{plus_minus}}, {{pts}}
+    {{/rows}}
+    '''
+
     def __init__(self, player_row):
         self.row = player_row
         self.id = -1
@@ -23,12 +30,4 @@ class Player:
         self.pf = 0             # Personal Foul?
         self.plus_minus = 0     # ?
         self.pts = 0            # ?
-        self.row_template = self.get_row_template()
 
-    @staticmethod
-    def get_row_template():
-        return """
-          {{#rows}}
-            {{id}}, {{name}}, {{year}}, {{height}}, {{position}}, {{games}}, {{min}}, {{fg}}, {{fg_pct}}, {{three_p}}, {{three_p_pct}}, {{offense_rating}}, {{defense_rating}}, {{tr}}, {{ast}}, {{stl}}, {{blk}}, {{to}}, {{pf}}, {{plus_minus}}, {{pts}}
-          {{/rows}}
-        """

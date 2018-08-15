@@ -1,10 +1,12 @@
+import pystache
 import requests
 
-import data_exporter
+from data_exporter import DataExporter
 import team_player_scraper
 import pprint
 from argparse import ArgumentParser
 
+from player_object import Player
 
 LOGIN_URL = 'http://drivethelane.com/'
 TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
@@ -27,9 +29,8 @@ def main(args):
         # print('------------VALUES------------')
         # pp.pprint(p)
 
-    value = {'rows': players}
-    exporter = data_exporter.DataExporter()
-    exporter.export_to_csv(players[0].row_template, value)
+    exporter = DataExporter()
+    exporter.export_to_csv(Player.RowTemplate, players)
 
 
 def get_page_content(session, url):
