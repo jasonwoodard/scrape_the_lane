@@ -49,7 +49,6 @@ class TeamPlayerScraper:
         player.pf = self.get_content(cells, 17)
         player.plus_minus = self.get_content(cells, 18)
         player.pts = self.get_content(cells, 19)
-        player.row_template = self.get_content(cells, 20)
 
         return player
 

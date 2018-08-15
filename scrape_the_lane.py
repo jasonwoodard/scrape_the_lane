@@ -1,4 +1,3 @@
-import pystache
 import requests
 
 from data_exporter import DataExporter
@@ -23,11 +22,13 @@ def main(args):
     scraper = team_player_scraper.TeamPlayerScraper(team_content)
     players = scraper.get_team_player_data()
 
-    # for p in players:
-        # print('------------ROW------------')
-        # print(p.row)
-        # print('------------VALUES------------')
-        # pp.pprint(p)
+    print 'Scraped Players: {0}'.format(len(players))
+
+    for p in players:
+        print ('------------ROW------------')
+        print(p.row)
+        print('------------VALUES------------')
+        print p.name
 
     exporter = DataExporter()
     exporter.export_to_csv(Player.RowTemplate, players)
@@ -35,12 +36,15 @@ def main(args):
 
 def get_page_content(session, url):
     page = session.get(url)
+    print 'Web Request: {0} from url: {1}'.format(page.status_code, url)
     return page.content
 
 
 def login(session, url, username, password):
     payload = {'user': username, 'pass': password, 'login': '1'}
     login_response = session.post(url, data=payload)
+    print 'Login Request: {0} username: {1}'.format(
+        login_response.status_code, username)
     return login_response.content
 
 
@@ -53,10 +57,11 @@ def get_session(username, password):
 
 
 parser = ArgumentParser()
-parser.add_argument("-u", "--user", dest="username", default=True,
-                    help="You need to provide a username")
-parser.add_argument("-p", "--pass", dest="password", default=True,
-                    help="You need to provide a password")
+parser.add_argument('-u', '--user', dest='username',
+                    help='You need to provide a username')
+parser.add_argument('-p', '--pass', dest='password',
+                    help='You need to provide a password')
+parser.add_argument('-d', '--debug', dest='debug', default=False)
 
 args = parser.parse_args()
 
