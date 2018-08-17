@@ -52,11 +52,19 @@ class TeamPlayerScraper:
         player.fg_attempted = fg_split[1]
         player.fg_pct = self._get_content(cells, 8)
 
-
         player.three_p = self._get_content(cells, 9)
         player.three_p_pct = self._get_content(cells, 10)
-        player.ft = self._get_content(cells, 11)
+
+        # Free Throws
+        ft_raw = self._get_content(cells, 11)
+        player.free_throws = ft_raw
+
+        # Free Throws split out
+        ft_split = fg_raw.split('-')
+        player.free_throw_made = ft_split[0]
+        player.free_throws_attempted = ft_split[1]
         player.ft_pct = self._get_content(cells, 12)
+
         player.offense_rating = self._get_content(cells, 13)
         player.defense_rating = self._get_content(cells, 14)
         player.tr = self._get_content(cells, 15)
@@ -88,7 +96,7 @@ class TeamPlayerScraper:
         # if a match is found return value otherwise return -1
         return matches.group(1) if matches else -1
 
-    def _get_split_data(self, split_td):
+    def _get_split_data(self, split_td, delimiter='-'):
         content = self._get_content(split_td)
-        parts = content.split()
+        parts = content.split(delimiter)
         return parts[0], parts[1]
