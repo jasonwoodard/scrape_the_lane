@@ -35,31 +35,34 @@ class TeamPlayerScraper:
         # Extract data from cells (TDs) and populate the player object.
         player.id = self._get_player_id(cells[0])
         player.name = self._get_player_name(cells[0])
-        player.year = cells[1].contents[0]
-        player.height = cells[2].contents[0]
-        player.position = cells[3].contents[0]
+        player.year = self._get_content(cells, 1)
+        player.height = self._get_content(cells, 2)
+        player.position = self._get_content(cells, 3)
         # Column 4 is a spacer column.
-        player.games = cells[5]
-        player.min = cells[6].contents[0]
-        player.fg = cells[7].contents[0]
-        player.fg_pct = cells[8].contents[0]
-        player.three_p = self.get_content(cells, 9)
-        player.offense_rating = self.get_content(cells, 10)
-        player.defense_rating = self.get_content(cells, 11)
-        player.tr = self.get_content(cells, 12)
-        player.ast = self.get_content(cells, 13)
-        player.stl = self.get_content(cells, 14)
-        player.blk = self.get_content(cells, 15)
-        player.to = self.get_content(cells, 16)
-        player.pf = self.get_content(cells, 17)
-        player.plus_minus = self.get_content(cells, 18)
-        player.pts = self.get_content(cells, 19)
+        player.games = self._get_content(cells, 5)
+        player.min = self._get_content(cells, 6)
+        player.fg = self._get_content(cells, 7)
+        player.fg_pct = self._get_content(cells, 8)
+        player.three_p = self._get_content(cells, 9)
+        player.three_p_pct = self._get_content(cells, 10)
+        player.ft = self._get_content(cells, 11)
+        player.ft_pct = self._get_content(cells, 12)
+        player.offense_rating = self._get_content(cells, 13)
+        player.defense_rating = self._get_content(cells, 14)
+        player.tr = self._get_content(cells, 15)
+        player.ast = self._get_content(cells, 16)
+        player.stl = self._get_content(cells, 17)
+        player.blk = self._get_content(cells, 18)
+        player.to = self._get_content(cells, 19)
+        player.pf = self._get_content(cells, 20)
+        player.plus_minus = self._get_content(cells, 21)
+        player.pts = self._get_content(cells, 22)
 
         return player
 
-    def get_content(self, cells, index):
+    def _get_content(self, cells, index):
         cell = cells[index]
-        value = cell.content[0] if cell is None else ''
+        value = cell.contents[0]
         return value
 
     def _get_player_name(self, name_td):

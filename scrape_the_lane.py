@@ -24,15 +24,21 @@ def main(args):
 
     print 'Scraped Players: {0}'.format(len(players))
 
+    i = 0
     # Debug Loop used to debug output
-    # for p in players:
-        # print ('------------ROW------------')
-        # print(p.row)
+    for p in players:
+        if i > 0:
+            break
+        print ('------------ROW------------')
+        print(p.row)
+        i = i + 1
+
         # print('------------VALUES------------')
         # print p.name
 
     exporter = DataExporter()
-    exporter.export_to_csv(Player.RowTemplate, players)
+    csv = exporter.convert_to_csv(Player.PlayerRowTemplate, Player.PlayerRowHeader, players)
+    print csv
 
 
 def get_page_content(session, url):
