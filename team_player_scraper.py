@@ -41,8 +41,18 @@ class TeamPlayerScraper:
         # Column 4 is a spacer column.
         player.games = self._get_content(cells, 5)
         player.min = self._get_content(cells, 6)
-        player.fg = self._get_content(cells, 7)
+
+        # Field Goals
+        fg_raw = self._get_content(cells, 7)
+        player.fg = fg_raw
+
+        # Field Goals split out
+        fg_split = fg_raw.split('-')
+        player.fg_made = fg_split[0]
+        player.fg_attempted = fg_split[1]
         player.fg_pct = self._get_content(cells, 8)
+
+
         player.three_p = self._get_content(cells, 9)
         player.three_p_pct = self._get_content(cells, 10)
         player.ft = self._get_content(cells, 11)
@@ -77,3 +87,8 @@ class TeamPlayerScraper:
         matches = re.search(r'pid=(p\w+)', href)
         # if a match is found return value otherwise return -1
         return matches.group(1) if matches else -1
+
+    def _get_split_data(self, split_td):
+        content = self._get_content(split_td)
+        parts = content.split()
+        return parts[0], parts[1]
