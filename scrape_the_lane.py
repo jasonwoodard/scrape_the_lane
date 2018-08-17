@@ -13,7 +13,7 @@ TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
 pp = pprint.PrettyPrinter()
 
 def main(args):
-
+    print '-----------------------\nBeginning scrape\n-----------------------'
     session = get_session(args.username, args.password)
 
     # Get team content
@@ -24,11 +24,12 @@ def main(args):
 
     print 'Scraped Players: {0}'.format(len(players))
 
-    for p in players:
-        print ('------------ROW------------')
-        print(p.row)
-        print('------------VALUES------------')
-        print p.name
+    # Debug Loop used to debug output
+    # for p in players:
+        # print ('------------ROW------------')
+        # print(p.row)
+        # print('------------VALUES------------')
+        # print p.name
 
     exporter = DataExporter()
     exporter.export_to_csv(Player.RowTemplate, players)
@@ -36,7 +37,7 @@ def main(args):
 
 def get_page_content(session, url):
     page = session.get(url)
-    print 'Web Request: {0} from url: {1}'.format(page.status_code, url)
+    print 'Scrape Request: {0} from url: {1}'.format(page.status_code, url)
     return page.content
 
 

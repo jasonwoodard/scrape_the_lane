@@ -1,3 +1,5 @@
+import re
+
 import soup_kitchen
 import player_object
 
@@ -29,7 +31,10 @@ class TeamPlayerScraper:
         # Assume row is tr.even or tr.odd from player table with the following cells
         # Name	Yr	Ht	Pos	[spacer] Gms Min FG	FG%	3P	3P%	FT	FT%	OR	DR	TR	Ast	Stl	Blk	TO	PF	+/-	Pts
         cells = row.find_all('td')
-        player.name = cells[0].contents[0]
+
+        # Extract data from cells (TDs) and populate the player object.
+        player.id = self._get_player_id(cells[0])
+        player.name = self._get_player_name(cells[0])
         player.year = cells[1].contents[0]
         player.height = cells[2].contents[0]
         player.position = cells[3].contents[0]
@@ -56,3 +61,16 @@ class TeamPlayerScraper:
         cell = cells[index]
         value = cell.content[0] if cell is None else ''
         return value
+
+    def _get_player_name(self, name_td):
+        # <a href="player?pid=p9DE5067489" class="player">Joseph Piccione</a>
+        return name_td.find('a').text
+
+    def _get_player_id(self, name_td):
+        # <a href="player?pid=p9DE5067489" class="player">Joseph Piccione</a>
+        href = name_td.find('a')['href']
+        # href should be 'player?pid=p9DE5067489'
+        # use regular expression to match part after equals sign.
+        matches = re.search(r'pid=(p\w+)', href)
+        # if a match is found return value otherwise return -1
+        return matches.group(1) if matches else -1

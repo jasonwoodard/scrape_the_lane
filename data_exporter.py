@@ -6,4 +6,5 @@ class DataExporter(object):
         pass
 
     def export_to_csv(self, template, players):
-        print pystache.render(template, players)
+        rows = {'rows': players}
+        print pystache.render(template, rows)
