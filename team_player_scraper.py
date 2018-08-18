@@ -27,33 +27,46 @@ class TeamPlayerScraper:
         pass
 
     def _extract_player_row(self, row):
+        # Attach row to player object incase we need it later.
         player = player_object.Player(row)
-        # Assume row is tr.even or tr.odd from player table with the following cells
-        # Name	Yr	Ht	Pos	[spacer] Gms Min FG	FG%	3P	3P%	FT	FT%	OR	DR	TR	Ast	Stl	Blk	TO	PF	+/-	Pts
+
+        # Row is tr.even or tr.odd from player table.
         cells = row.find_all('td')
 
-        # Extract data from cells (TDs) and populate the player object.
+        # Extract data from cells (TDs) by cell ID and populate the player object.
+        # RISK: If the order of the cells changes, we need to revise this section.
         player.id = self._get_player_id(cells[0])
         player.name = self._get_player_name(cells[0])
         player.year = self._get_content(cells, 1)
         player.height = self._get_content(cells, 2)
         player.position = self._get_content(cells, 3)
-        # Column 4 is a spacer column.
+
+        # Column 4 is a spacer column. Skip it.
+
         player.games = self._get_content(cells, 5)
         player.min = self._get_content(cells, 6)
 
         # Field Goals
+        # Get the 'raw' value shown on screen and put it on the player object.
         fg_raw = self._get_content(cells, 7)
         player.fg = fg_raw
 
         # Field Goals split out
+        # Split raw value into made - attempted. Assign those values to the player object.
         fg_split = fg_raw.split('-')
         player.fg_made = fg_split[0]
         player.fg_attempted = fg_split[1]
         player.fg_pct = self._get_content(cells, 8)
 
-        player.three_p = self._get_content(cells, 9)
-        player.three_p_pct = self._get_content(cells, 10)
+        # Three Pointers
+        three_p_raw = self._get_content(cells, 9)
+        player.three_point = three_p_raw
+
+        # Three Pointer split out
+        three_p_split = three_p_raw.split('-')
+        player.three_point_made = three_p_split[0]
+        player.three_point_attempted = three_p_split[1]
+        player.three_point_pct = self._get_content(cells, 10)
 
         # Free Throws
         ft_raw = self._get_content(cells, 11)
@@ -61,9 +74,11 @@ class TeamPlayerScraper:
 
         # Free Throws split out
         ft_split = fg_raw.split('-')
-        player.free_throw_made = ft_split[0]
+        player.free_throws_made = ft_split[0]
         player.free_throws_attempted = ft_split[1]
-        player.ft_pct = self._get_content(cells, 12)
+        player.free_throws_pct = self._get_content(cells, 12)
+
+        print player.free_throw_pct
 
         player.offense_rating = self._get_content(cells, 13)
         player.defense_rating = self._get_content(cells, 14)

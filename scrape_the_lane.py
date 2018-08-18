@@ -24,17 +24,17 @@ def main(args):
 
     print 'Scraped Players: {0}'.format(len(players))
 
-    i = 0
-    # Debug Loop used to debug output
-    for p in players:
-        if i > 0:
-            break
-        print ('------------ROW------------')
-        print(p.row)
-        i = i + 1
+    # i = 0
+    # # Debug Loop used to debug output
+    # for p in players:
+    #     if i > 0:
+    #         break
+    #     print ('------------ROW------------')
+    #     print(p.row)
+    #     i = i + 1
 
-        # print('------------VALUES------------')
-        # print p.name
+    #     print('------------VALUES------------')
+    #     print p.name
 
     exporter = DataExporter()
     csv = exporter.convert_to_csv(Player.PlayerRowTemplate, Player.PlayerRowHeader, players)
