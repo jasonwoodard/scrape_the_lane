@@ -37,8 +37,10 @@ def main(args):
     #     print p.name
 
     exporter = DataExporter()
-    csv = exporter.convert_to_csv(Player.PlayerRowTemplate, Player.PlayerRowHeader, players)
-    print csv
+    # csv = exporter.convert_to_csv('', players)
+    # print csv
+
+    exporter.write_to_csv(Player.RowHeader, players)
 
 
 def get_page_content(session, url):
