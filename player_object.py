@@ -1,12 +1,35 @@
 
 class Player(object):
 
-    PlayerRowHeader = '''
-    Id, Name, Yr, Ht, Pos, Gms, Min, FG, FG_Made, FG_Attempt, FG%, 3P, 3P%, FT, FT_Made, FT_Attempt FT%, OR, DR, TR, Ast, Stl, Blk, TO, PF, +/-, Pts'''
-
-    PlayerRowTemplate = '''
-    {{id}}, {{name}}, {{year}}, {{height}}, {{position}}, {{games}}, {{min}}, {{fg}}, {{fg_made}}, {{fg_attempted}}, {{fg_pct}}, {{three_point}}, {{three_point_made}}, {{three_point_pct}}, {{free_throws}}, {{free_throws_made}}, {{free_throws_attempted}}, {{free_throws_pct}}, {{offense_rating}}, {{defense_rating}}, {{tr}}, {{ast}}, {{stl}}, {{blk}}, {{to}}, {{pf}}, {{plus_minus}}, {{pts}}
-    '''
+    RowHeader = [
+        'Id',
+        'Name',
+        'Yr',
+        'Ht',
+        'Pos',
+        'Gms',
+        'Min',
+        'FG',
+        'FG_Made',
+        'FG_Attempt',
+        'FG %',
+        '3P',
+        '3P %',
+        'FT',
+        'FT_Made',
+        'FT_Attempt',
+        'FT %',
+        'OR',
+        'DR',
+        'TR',
+        'Ast',
+        'Stl',
+        'Blk',
+        'TO',
+        'PF',
+        '+ / -',
+        'Pts'
+    ]
 
     def __init__(self, player_row):
         self.row = player_row
@@ -39,3 +62,36 @@ class Player(object):
         self.pf = 0             # Personal Foul?
         self.plus_minus = 0     # ?
         self.pts = 0            # ?
+
+    def emit_row(self):
+        return [
+            self.id,
+            self.name,
+            self.year,
+            self.height,
+            self.position,
+            self.games,
+            self.min,
+            self.fg,
+            self.fg_made,
+            self.fg_attempted,
+            self.fg_pct,
+            self.three_point,
+            self.three_point_made,
+            self.three_point_attempted,
+            self.three_point_pct,
+            self.free_throws,
+            self.free_throws_made,
+            self.free_throw_attempted,
+            self.free_throw_pct,
+            self.offense_rating,
+            self.defense_rating,
+            self.tr,
+            self.ast,
+            self.stl,
+            self.blk,
+            self.to,
+            self.pf,
+            self.plus_minus,
+            self.pts
+        ]
