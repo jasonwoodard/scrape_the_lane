@@ -76,9 +76,7 @@ class TeamPlayerScraper:
         ft_split = fg_raw.split('-')
         player.free_throws_made = ft_split[0]
         player.free_throws_attempted = ft_split[1]
-        player.free_throws_pct = self._get_content(cells, 12)
-
-        print player.free_throw_pct
+        player.free_throws_pct = self._get_content(cells, 12)\
 
         player.offense_rating = self._get_content(cells, 13)
         player.defense_rating = self._get_content(cells, 14)
