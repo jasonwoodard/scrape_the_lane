@@ -95,3 +95,9 @@ class Player(object):
             self.plus_minus,
             self.pts
         ]
+
+    def get_true_shot(self):
+        # use properties on the player, e.g. self.three_point_made to return a value.
+        true_shot = 0
+        # Your function goes here
+        return true_shot
