@@ -16,6 +16,8 @@ class Player(object):
         'FG_Attempt',
         'FG %',
         '3P',
+        '3P_Made',
+        '3P_Attempt',
         '3P %',
         'FT',
         'FT_Made',
