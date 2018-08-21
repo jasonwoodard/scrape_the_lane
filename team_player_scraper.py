@@ -43,7 +43,6 @@ class TeamPlayerScraper:
         # Attach row to player object incase we need it later.
         player = player_object.Player(row)
 
-        # Row is tr.even or tr.odd from player table.
         cells = row.find_all('td')
 
         # Extract data from cells (TDs) by cell ID and populate the player object.
