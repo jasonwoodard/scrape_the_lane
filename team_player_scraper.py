@@ -2,29 +2,42 @@ import re
 
 import soup_kitchen
 import player_object
+import team_object
 
 
 class TeamPlayerScraper:
-    def __init__(self, team_page):
-        self.team_soup = soup_kitchen.get_soup(team_page)
-        self.team_name = self.get_team_name()
+    def __init__(self, team_page, team_id):
+        self.team_page_soup = soup_kitchen.get_soup(team_page)
+        self.id = team_id
+        self.team = self._get_team(team_id)
 
     def get_team_player_data(self):
         players = []
-        rows = self._get_team_rows()
+
+        rows = self._get_player_rows()
         for row in rows:
             player = self._extract_player_row(row)
+            player.team = self.team
             players.append(player)
 
         return players
 
-    def _get_team_rows(self):
-        return self.team_soup.select('tr.even, tr.odd')
+    def _get_player_rows(self):
+        return self.team_page_soup.select('tr.even, tr.odd')
 
-    def get_team_name(self):
-        # name = self.team_soup.find()
-        return 'get team name not implemented'
-        pass
+    def _get_team(self, id):
+        header = soup_kitchen.get_team_header(self.team_page_soup)
+        name = self._get_team_name(header)
+
+        team = team_object.Team()
+        team.id = id
+        team.name = name
+        return team
+
+    @staticmethod
+    def _get_team_name(element):
+        name_element = element.find('span', {'class': 'h1'})
+        return name_element.text
 
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.
@@ -76,7 +89,7 @@ class TeamPlayerScraper:
         ft_split = fg_raw.split('-')
         player.free_throws_made = ft_split[0]
         player.free_throws_attempted = ft_split[1]
-        player.free_throws_pct = self._get_content(cells, 12)\
+        player.free_throws_pct = self._get_content(cells, 12)
 
         player.offense_rating = self._get_content(cells, 13)
         player.defense_rating = self._get_content(cells, 14)

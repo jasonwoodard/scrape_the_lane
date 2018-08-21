@@ -2,8 +2,10 @@
 class Player(object):
 
     RowHeader = [
-        'Id',
-        'Name',
+        'Team Id',
+        'Team Name',
+        'Player Id',
+        'Player Name',
         'Yr',
         'Ht',
         'Pos',
@@ -33,6 +35,7 @@ class Player(object):
 
     def __init__(self, player_row):
         self.row = player_row
+        self.team = None
         self.id = -1
         self.name = ''
         self.year = ''
@@ -65,6 +68,8 @@ class Player(object):
 
     def emit_row(self):
         return [
+            self.team.id,
+            self.team.name,
             self.id,
             self.name,
             self.year,
