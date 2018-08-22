@@ -57,7 +57,7 @@ class TeamPlayerScraper:
         # Column 4 is a spacer column. Skip it.
 
         player.games = self._get_content(cells, 5)
-        player.min = self._get_content(cells, 6)
+        player.minutes = self._get_content(cells, 6)
 
         # Field Goals
         # Get the 'raw' value shown on screen and put it on the player object.

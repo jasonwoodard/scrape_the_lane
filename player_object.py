@@ -44,7 +44,7 @@ class Player(object):
         self.height = ''
         self.position = ''
         self.games = ''
-        self.min = ''
+        self.minutes = ''
         self.fg = ''
         self.fg_made = 0
         self.fg_attempted = 0
@@ -78,7 +78,7 @@ class Player(object):
             self.height,
             self.position,
             self.games,
-            self.min,
+            self.minutes,
             self.fg,
             self.fg_made,
             self.fg_attempted,
