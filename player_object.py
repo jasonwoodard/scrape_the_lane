@@ -68,7 +68,6 @@ class Player(object):
         self.pts = 0  # ?
 
     def emit_row(self):
-        print 'team: {0} player: {1} true_shot: {2}'.format(self.team.id, self.id, self.get_true_shot_percent())
         return [
             self.team.id,
             self.team.name,
@@ -106,13 +105,7 @@ class Player(object):
 
     def get_true_shot_percent(self):
         coefficient = 0.475
-        print 'player: {0} - {1}'.format(self.id, self.name)
-        print 'free_throws_attempted value: {0} type:{1}'.format(self.free_throws_attempted,
-                                                                 type(self.free_throws_attempted))
-        print 'fg_attempted value: {0} type:{1}'.format(self.fg_attempted, type(self.fg_attempted))
-        print 'pts value: {0} type:{1}'.format(self.pts, type(self.pts))
-
         shot_factor = self.fg_attempted + (coefficient * self.free_throws_attempted)
         if shot_factor > 0:
             return self.pts / (2 * shot_factor)
-        return 0
+        return 0  # Return zero or is None better?
