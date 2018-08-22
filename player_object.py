@@ -106,6 +106,6 @@ class Player(object):
     def get_true_shot_percent(self):
         coefficient = 0.475
         shot_factor = self.fg_attempted + (coefficient * self.free_throws_attempted)
-        if shot_factor > 0:
+        if shot_factor != 0:
             return self.pts / (2 * shot_factor)
         return 0  # Return zero or is None better?
