@@ -67,8 +67,8 @@ class TeamPlayerScraper:
         # Field Goals split out
         # Split raw value into made - attempted. Assign those values to the player object.
         fg_split = fg_raw.split('-')
-        player.fg_made = fg_split[0]
-        player.fg_attempted = fg_split[1]
+        player.fg_made = float(fg_split[0])
+        player.fg_attempted = float(fg_split[1])
         player.fg_pct = self._get_content(cells, 8)
 
         # Three Pointers
@@ -78,7 +78,7 @@ class TeamPlayerScraper:
         # Three Pointer split out
         three_p_split = three_p_raw.split('-')
         player.three_point_made = three_p_split[0]
-        player.three_point_attempted = three_p_split[1]
+        player.three_point_attempted = float(three_p_split[1])
         player.three_point_pct = self._get_content(cells, 10)
 
         # Free Throws
@@ -87,8 +87,8 @@ class TeamPlayerScraper:
 
         # Free Throws split out
         ft_split = fg_raw.split('-')
-        player.free_throws_made = ft_split[0]
-        player.free_throws_attempted = ft_split[1]
+        player.free_throws_made = float(ft_split[0])
+        player.free_throws_attempted = float(ft_split[1])
         player.free_throws_pct = self._get_content(cells, 12)
 
         player.offense_rating = self._get_content(cells, 13)
@@ -100,7 +100,7 @@ class TeamPlayerScraper:
         player.to = self._get_content(cells, 19)
         player.pf = self._get_content(cells, 20)
         player.plus_minus = self._get_content(cells, 21)
-        player.pts = self._get_content(cells, 22)
+        player.pts = self._get_float_content(cells, 22)
 
         return player
 
@@ -108,6 +108,12 @@ class TeamPlayerScraper:
         cell = cells[index]
         value = cell.contents[0]
         return value
+
+    def _get_int_content(self, cells, index):
+        return int(self._get_content(cells, index))
+
+    def _get_float_content(self, cells, index):
+        return float(self._get_content(cells, index))
 
     def _get_player_name(self, name_td):
         # <a href="player?pid=p9DE5067489" class="player">Joseph Piccione</a>

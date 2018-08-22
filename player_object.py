@@ -1,6 +1,4 @@
-
 class Player(object):
-
     RowHeader = [
         'Team Id',
         'Team Name',
@@ -32,7 +30,8 @@ class Player(object):
         'TO',
         'PF',
         '+ / -',
-        'Pts'
+        'Pts',
+        'True Shot %'
     ]
 
     def __init__(self, player_row):
@@ -55,20 +54,21 @@ class Player(object):
         self.three_point_pct = 0
         self.free_throws = 0
         self.free_throws_made = 0
-        self.free_throw_attempted = 0
+        self.free_throws_attempted = 0
         self.free_throw_pct = 0
         self.offense_rating = 0
         self.defense_rating = 0
-        self.tr = 0             # ?
-        self.ast = 0            # Assists?
-        self.stl = 0            # Steals
-        self.blk = 0            # Blocks
-        self.to = 0             # ?
-        self.pf = 0             # Personal Foul?
-        self.plus_minus = 0     # ?
-        self.pts = 0            # ?
+        self.tr = 0  # ?
+        self.ast = 0  # Assists?
+        self.stl = 0  # Steals
+        self.blk = 0  # Blocks
+        self.to = 0  # ?
+        self.pf = 0  # Personal Foul?
+        self.plus_minus = 0  # ?
+        self.pts = 0  # ?
 
     def emit_row(self):
+        print 'team: {0} player: {1} true_shot: {2}'.format(self.team.id, self.id, self.get_true_shot_percent())
         return [
             self.team.id,
             self.team.name,
@@ -89,7 +89,7 @@ class Player(object):
             self.three_point_pct,
             self.free_throws,
             self.free_throws_made,
-            self.free_throw_attempted,
+            self.free_throws_attempted,
             self.free_throw_pct,
             self.offense_rating,
             self.defense_rating,
@@ -100,11 +100,19 @@ class Player(object):
             self.to,
             self.pf,
             self.plus_minus,
-            self.pts
+            self.pts,
+            self.get_true_shot_percent()
         ]
 
-    def get_fg_true_shot(self):
-        # use properties on the player, e.g. self.three_point_made to return a value.
-        true_shot = -1
-        # Your function goes here
-        return true_shot
+    def get_true_shot_percent(self):
+        coefficient = 0.475
+        print 'player: {0} - {1}'.format(self.id, self.name)
+        print 'free_throws_attempted value: {0} type:{1}'.format(self.free_throws_attempted,
+                                                                 type(self.free_throws_attempted))
+        print 'fg_attempted value: {0} type:{1}'.format(self.fg_attempted, type(self.fg_attempted))
+        print 'pts value: {0} type:{1}'.format(self.pts, type(self.pts))
+
+        shot_factor = self.fg_attempted + (coefficient * self.free_throws_attempted)
+        if shot_factor > 0:
+            return self.pts / (2 * shot_factor)
+        return 0

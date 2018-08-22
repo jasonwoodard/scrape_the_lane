@@ -19,7 +19,7 @@ def main(args):
 
     players = []
     team_index = 0
-    while team_index < 256:
+    while team_index < 2:
         team_index += 1
 
         # Get team content
