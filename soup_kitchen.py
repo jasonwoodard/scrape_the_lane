@@ -9,5 +9,10 @@ def get_soup(page_content):
 
 def get_rows(soup, selector):
     # pull out table
-    rows = soup.select(selector)
-    return rows
+    elements = soup.select(selector)
+    return elements
+
+
+def get_team_header(soup):
+    element = soup.find(id='team-header')
+    return element

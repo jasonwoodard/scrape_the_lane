@@ -8,39 +8,37 @@ from argparse import ArgumentParser
 from player_object import Player
 
 LOGIN_URL = 'http://drivethelane.com/'
-TEAM_URL = 'http://drivethelane.com/team-stats?tid=t1'
+TEAM_URL = 'http://drivethelane.com/team-stats?tid=t{0}'
 
 pp = pprint.PrettyPrinter()
+
 
 def main(args):
     print '-----------------------\nBeginning scrape\n-----------------------'
     session = get_session(args.username, args.password)
 
-    # Get team content
-    team_content = get_page_content(session, TEAM_URL)
+    players = []
+    team_index = 0
+    while team_index < 256:
+        team_index += 1
 
-    scraper = team_player_scraper.TeamPlayerScraper(team_content)
-    players = scraper.get_team_player_data()
+        # Get team content
+        team_content = get_page_content(session, build_team_url(team_index))
 
-    print 'Scraped Players: {0}'.format(len(players))
+        scraper = team_player_scraper.TeamPlayerScraper(team_content, team_index)
+        team_players = scraper.get_team_player_data()
+        players.extend(team_players)
 
-    # i = 0
-    # # Debug Loop used to debug output
-    # for p in players:
-    #     if i > 0:
-    #         break
-    #     print ('------------ROW------------')
-    #     print(p.row)
-    #     i = i + 1
-
-    #     print('------------VALUES------------')
-    #     print p.name
+        print 'Team Id: {0}'.format(team_index)
+        print 'Team {0} Players: {1} '.format(team_index, len(team_players))
+        print 'Total Players: {0}'.format(len(players))
 
     exporter = DataExporter()
-    # csv = exporter.convert_to_csv('', players)
-    # print csv
-
     exporter.write_to_csv(Player.RowHeader, players)
+
+
+def build_team_url(team_id):
+    return TEAM_URL.format(team_id)
 
 
 def get_page_content(session, url):
@@ -70,7 +68,7 @@ parser.add_argument('-u', '--user', dest='username',
                     help='You need to provide a username')
 parser.add_argument('-p', '--pass', dest='password',
                     help='You need to provide a password')
-parser.add_argument('-d', '--debug', dest='debug', default=False)
+# parser.add_argument('-d', '--debug', dest='debug', default=False)
 
 args = parser.parse_args()
 
