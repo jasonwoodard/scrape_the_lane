@@ -8,7 +8,10 @@ from argparse import ArgumentParser
 from player_object import Player
 
 LOGIN_URL = 'http://drivethelane.com/'
-TEAM_URL = 'http://drivethelane.com/team-stats?tid=t{0}'
+TEAM_URL = 'http://drivethelane.com/team-stats?atype=t&gtype=reg&mode=g&tid=t1{0}'
+
+# Can we change the scraped page to the totals page without breaking anything else?  
+# http://drivethelane.com/team-stats?atype=t&gtype=reg&mode=g&tid=t1
 
 pp = pprint.PrettyPrinter()
 
