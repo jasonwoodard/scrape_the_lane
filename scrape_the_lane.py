@@ -17,7 +17,7 @@ pp = pprint.PrettyPrinter()
 
 
 def main(args):
-    print '-----------------------\nBeginning scrape\n-----------------------'
+    print('-----------------------\nBeginning scrape\n-----------------------')
     session = get_session(args.username, args.password)
 
     players = []
@@ -32,9 +32,9 @@ def main(args):
         team_players = scraper.get_team_player_data()
         players.extend(team_players)
 
-        print 'Team Id: {0}'.format(team_index)
-        print 'Team {0} Players: {1} '.format(team_index, len(team_players))
-        print 'Total Players: {0}'.format(len(players))
+        print('Team Id: {0}'.format(team_index))
+        print('Team {0} Players: {1} '.format(team_index, len(team_players)))
+        print('Total Players: {0}'.format(len(players)))
 
     exporter = DataExporter()
     exporter.write_to_csv(Player.RowHeader, players)
@@ -46,15 +46,15 @@ def build_team_url(team_id):
 
 def get_page_content(session, url):
     page = session.get(url)
-    print 'Scrape Request: {0} from url: {1}'.format(page.status_code, url)
+    print('Scrape Request: {0} from url: {1}'.format(page.status_code, url))
     return page.content
 
 
 def login(session, url, username, password):
     payload = {'user': username, 'pass': password, 'login': '1'}
     login_response = session.post(url, data=payload)
-    print 'Login Request: {0} username: {1}'.format(
-        login_response.status_code, username)
+    print('Login Request: {0} username: {1}'.format(
+        login_response.status_code, username))
     return login_response.content
 
 
