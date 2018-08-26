@@ -63,28 +63,28 @@ class Player(object):
     def __init__(self, player_row):
         self.row = player_row
         self.team = None 
-        self.id = -1 # The unique player identification number
-        self.name = '' # Player's name
-        self.year = '' # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
-        self.height = '' # The height of the player in feet'inches
+        self.id = -1  # The unique player identification number
+        self.name = ''  # Player's name
+        self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
+        self.height = ''  # The height of the player in feet'inches
         self.position = '' # The position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
-        self.games = '' # Number of games played
-        self.minutes = '' # Number of minutes played
-        self.minutes_float = 0 # Minutes value as a decimal
-        self.fg = '' # Number of field goals made-attempted
-        self.fg_made = 0 # Number of field goals made
-        self.fg_attempted = 0 # Number of Field goal shots attempted
-        self.fg_pct = 0 # Percentage of field goal attempts made 
-        self.three_point = '' # three pointers made-attempted
-        self.three_point_made = 0 # of three pointers made
-        self.three_point_attempted = 0 # number of three pointers attempted
-        self.three_point_pct = 0 # Percentage of three-point shots made
-        self.free_throws = 0 # Free throws made - attempted 
-        self.free_throws_made = 0 # Free throws made
-        self.free_throws_attempted = 0 # Free Throw attempts
-        self.free_throw_pct = 0 # Percentage of free throws made
-        self.offense_rebounds = 0 # Offensive rebounds --> Changed name of attribute
-        self.defense_rebounds = 0 # Defensive rebounds --> Changed name of attribute
+        self.games = 0  # Number of games played
+        self.minutes = ''  # Number of minutes played as time value
+        self.minutes_float = 0  # Minutes value as a decimal
+        self.fg = ''  # Number of field goals made-attempted
+        self.fg_made = 0  # Number of field goals made
+        self.fg_attempted = 0  # Number of Field goal shots attempted
+        self.fg_pct = 0  # Percentage of field goal attempts made
+        self.three_point = ''  # three pointers made-attempted
+        self.three_point_made = 0  # of three pointers made
+        self.three_point_attempted = 0  # number of three pointers attempted
+        self.three_point_pct = 0  # Percentage of three-point shots made
+        self.free_throws = 0  # Free throws made - attempted
+        self.free_throws_made = 0  # Free throws made
+        self.free_throws_attempted = 0  # Free Throw attempts
+        self.free_throw_pct = 0  # Percentage of free throws made
+        self.offense_rebounds = 0  # Offensive rebounds
+        self.defense_rebounds = 0  # Defensive rebounds
         self.tr = 0  # Total Rebounds
         self.ast = 0  # Assists
         self.stl = 0  # Steals
@@ -147,7 +147,7 @@ class Player(object):
             self.get_pts_thirty(),
             self.get_oreb_thirty(),
             self.get_dreb_thirty(),
-            self.get_treb_thirty(), # Not sure this is the right function was get_tr_thirty()
+            self.get_treb_thirty(),
             self.get_ast_thirty(),
             self.get_stl_thirty(),
             self.get_blk_thirty(),
@@ -166,6 +166,8 @@ class Player(object):
 # 100*Points / [2 * (FGA + .44*FTA) ]
 
     def get_gamescore(self):
+        # TODO(mgadfly): break this up.  The first 4 terms are identical between this and next functions consider helper
+        # function that returns those values.
         return self.pts + 0.4 * self.fg_attempted - 0.4 * (self.free_throws_attempted - self.free_throws_made) + 0.7 * self.offense_rebounds + 0.3 * self.defense_rebounds + self.stl + 0.7 * self.ast + 0.7 * self.blk - 0.4 * self.pf - self.to
 
     def get_km_gamescore(self):
@@ -241,12 +243,6 @@ class Player(object):
         return self.fg_attempted - self.three_point_attempted
     
     def get_two_point_pct(self):
-        # Here, I'm not sure how to reference the values returned by the previous functions.
-        # [JW] Use local variables to make your life easier.
-        # I need to divide the result of  get_two_point_made by get_two_point_attempted
-        # I also need to check for zero
-        # [JW] Sure. local variables help with this and make your zero check easier.
-
         two_point_made = self.get_two_point_made()
         two_point_attempted = self.get_two_point_attempted()
 
@@ -264,12 +260,12 @@ class Player(object):
     
     def get_oreb_thirty(self):
         if self.minutes_float != 0:
-            return (self.offensive_rebounds / self.minutes_float) * 30
+            return (self.offense_rebounds / self.minutes_float) * 30
         return 0
     
     def get_dreb_thirty(self):
         if self.minutes_float != 0:
-            return (self.defensive_rebounds / self.minutes_float) * 30
+            return (self.defense_rebounds / self.minutes_float) * 30
         return 0
     
     def get_treb_thirty(self):
