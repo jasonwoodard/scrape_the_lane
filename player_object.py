@@ -114,24 +114,21 @@ class Player(object):
             self.pf,
             self.plus_minus,
             self.pts,
-            self.get_true_shot_percent()
-            self.effective_fg_percent()
-            self.get_two_point_made()
-            self.get_two_point_attempted()
-            self.get_two_point_pct()
-            self.get_pts_thirty()
-            self.get_oreb_thirty()
-            self.get_dreb_thirty()
-            self.get_tr_thirty()
-            self.get_ast_thirty()
-            self.get_stl_thirty()
-            self.get_blk_thirty()
-            self.get_to_thirty()
-            self.get_pf_thirty()
+            self.get_true_shot_percent(),
+            self.effective_fg_percent(),
+            self.get_two_point_made(),
+            self.get_two_point_attempted(),
+            self.get_two_point_pct(),
+            self.get_pts_thirty(),
+            self.get_oreb_thirty(),
+            self.get_dreb_thirty(),
+            self.get_tr_thirty(),
+            self.get_ast_thirty(),
+            self.get_stl_thirty(),
+            self.get_blk_thirty(),
+            self.get_to_thirty(),
+            self.get_pf_thirty(),
             self.get_plus_minus_thirty()
-            
-            
-            
         ]
 
     def get_true_shot_percent(self):
@@ -159,7 +156,7 @@ class Player(object):
     def get_two_point_attempted(self):
         return self.fg_attempted - self.three_point_attempted
     
-    def get_two_point_pct():
+    def get_two_point_pct(self):
         # Here, I'm not sure how to reference the values returned by the previous functions.
         # I need to divide the result of  get_two_point_made by get_two_point_attempted
         # I also need to check for zero
