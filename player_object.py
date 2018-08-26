@@ -192,38 +192,24 @@ class Player(object):
         return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
     def get_gamescore(self):
-        or_coefficient = 0.7
-        dr_coefficient = 0.3
-        stl_coefficient = 1.0
-        ast_coefficient = 0.7
-        blk_coefficient = 0.7
-        pf_coefficient = 0.4
-        to_coefficient = 1.0
         return self._calc_game_score(
-            or_coefficient,
-            dr_coefficient,
-            stl_coefficient,
-            ast_coefficient,
-            blk_coefficient,
-            pf_coefficient,
-            to_coefficient)
+            or_coefficient=0.7,
+            dr_coefficient=0.3,
+            stl_coefficient=1.0,
+            ast_coefficient=0.7,
+            blk_coefficient=0.7,
+            pf_coefficient=0.4,
+            to_coefficient=1.0)
 
     def get_km_gamescore(self):
-        or_coefficient = 1.0
-        dr_coefficient = 0.5
-        stl_coefficient = 1.4
-        ast_coefficient = 1.0
-        blk_coefficient = 1.4
-        pf_coefficient = 0.4
-        to_coefficient = 1.4
         return self._calc_game_score(
-            or_coefficient,
-            dr_coefficient,
-            stl_coefficient,
-            ast_coefficient,
-            blk_coefficient,
-            pf_coefficient,
-            to_coefficient)
+            or_coefficient=1.0,
+            dr_coefficient=0.5,
+            stl_coefficient=1.4,
+            ast_coefficient=1.0,
+            blk_coefficient=1.4,
+            pf_coefficient=0.4,
+            to_coefficient=1.4)
 
     def _calc_game_score(self,
                          or_coefficient,
