@@ -165,7 +165,8 @@ class Player(object):
 
 # 100*Points / [2 * (FGA + .44*FTA) ]
 
-    def get_gamescore(self):
+    # todo(woodard): Delete OLD version
+    def get_gamescore_old(self):
         fg_attempted_factor = (0.4 * self.fg_attempted)
         free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
         or_factor = (0.7 * self.offense_rebounds)
@@ -177,7 +178,8 @@ class Player(object):
         to_factor = (1 * self.to)
         return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
-    def get_km_gamescore(self):
+    # todo(woodard): Delete OLD version
+    def get_km_gamescore_old(self):
         fg_attempted_factor = (0.4 * self.fg_attempted)
         free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
         or_factor = (1.0 * self.offense_rebounds)
@@ -187,6 +189,48 @@ class Player(object):
         blk_factor = (1.4 * self.blk)
         pf_factor = (0.4 * self.pf)
         to_factor = (1.4 * self.to)
+        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
+
+    def get_gamescore(self):
+        return self._calc_game_score(
+            or_coefficient=0.7,
+            dr_coefficient=0.3,
+            stl_coefficient=1.0,
+            ast_coefficient=0.7,
+            blk_coefficient=0.7,
+            pf_coefficient=0.4,
+            to_coefficient=1.0)
+
+    def get_km_gamescore(self):
+        return self._calc_game_score(
+            or_coefficient=1.0,
+            dr_coefficient=0.5,
+            stl_coefficient=1.4,
+            ast_coefficient=1.0,
+            blk_coefficient=1.4,
+            pf_coefficient=0.4,
+            to_coefficient=1.4)
+
+    def _calc_game_score(self,
+                         or_coefficient,
+                         dr_coefficient,
+                         stl_coefficient,
+                         ast_coefficient,
+                         blk_coefficient,
+                         pf_coefficient,
+                         to_coefficient):
+        # fg and free throw are constant between gamescore and km_gamescore
+        fg_attempted_factor = (0.4 * self.fg_attempted)
+        free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
+
+        # use the coefficients for each method to calculator the factor
+        or_factor = (or_coefficient * self.offense_rebounds)
+        dr_factor = (dr_coefficient * self.defense_rebounds)
+        stl_factor = (stl_coefficient * self.stl)
+        ast_factor = (ast_coefficient * self.ast)
+        blk_factor = (blk_coefficient * self.blk)
+        pf_factor = (pf_coefficient * self.pf)
+        to_factor = (to_coefficient * self.to)
         return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
     def get_ppg(self):
