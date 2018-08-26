@@ -70,7 +70,7 @@ parser.add_argument('-p', '--pass', dest='password',
                     help='You need to provide a password')
 # parser.add_argument('-d', '--debug', dest='debug', default=False)
 
-args = parser.parse_args()
+cmd_args = parser.parse_args()
 
 if __name__ == '__main__':
-    main(args)
+    main(cmd_args)
