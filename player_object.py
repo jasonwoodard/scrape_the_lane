@@ -166,12 +166,28 @@ class Player(object):
 # 100*Points / [2 * (FGA + .44*FTA) ]
 
     def get_gamescore(self):
-        # TODO(mgadfly): break this up.  The first 4 terms are identical between this and next functions consider helper
-        # function that returns those values.
-        return self.pts + 0.4 * self.fg_attempted - 0.4 * (self.free_throws_attempted - self.free_throws_made) + 0.7 * self.offense_rebounds + 0.3 * self.defense_rebounds + self.stl + 0.7 * self.ast + 0.7 * self.blk - 0.4 * self.pf - self.to
+        fg_attempted_factor = (0.4 * self.fg_attempted)
+        free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
+        or_factor = (0.7 * self.offense_rebounds)
+        dr_factor = (0.3 * self.defense_rebounds)
+        stl_factor = (1 * self.stl)
+        ast_factor = (0.7 * self.ast)
+        blk_factor = (0.7 * self.blk)
+        pf_factor = (0.4 * self.pf)
+        to_factor = (1 * self.to)
+        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
     def get_km_gamescore(self):
-        return self.pts + 0.4 * self.fg_attempted - 0.4 * (self.free_throws_attempted - self.free_throws_made) + 1.0 * self.offense_rebounds + 0.5 * self.defense_rebounds + 1.4 * self.stl + 1.0 * self.ast + 1.4 * self.blk - 0.4 * self.pf - 1.4 * self.to
+        fg_attempted_factor = (0.4 * self.fg_attempted)
+        free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
+        or_factor = (1.0 * self.offense_rebounds)
+        dr_factor = (0.5 * self.defense_rebounds)
+        stl_factor = (1.4 * self.stl)
+        ast_factor = (1.0 * self.ast)
+        blk_factor = (1.4 * self.blk)
+        pf_factor = (0.4 * self.pf)
+        to_factor = (1.4 * self.to)
+        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
     def get_ppg(self):
         if self.games != 0 and self.pts != 0:
@@ -223,7 +239,7 @@ class Player(object):
             return self.plus_minus / self.games
         return 0
     
-    def effective_fg_percent(self):
+    def get_effective_fg_percent(self):
         coefficient = 0.5
         three_point_factor = coefficient * self.three_point_made
         efg = self.fg_made + three_point_factor
@@ -251,7 +267,12 @@ class Player(object):
         return 0
     
     ### PER 30 MINUTE STATS (PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus)
-    ### Do I need a seperate function for each of these or could I return a list that then returns values that are assigned to spots on the emit function
+
+    # Do I need a seperate function for each of these or could I return a list that then returns values that are
+    # assigned to spots on the emit function.
+    # [JW] all of these functions look the same to me with on point of variance.
+    # Let me send a change that uses a helper function to do the work.  I think from a object ease of use
+    # stand point you'll want to keep the named stat functions but they will all be one line of code.
     
     def get_pts_thirty(self):
         if self.minutes_float !=0:
@@ -270,7 +291,7 @@ class Player(object):
     
     def get_treb_thirty(self):
         if self.minutes_float != 0:
-            return self.tr / self.minutes_float
+            return (self.tr / self.minutes_float) * 30
         return 0
     
     def get_ast_thirty(self):
@@ -285,7 +306,7 @@ class Player(object):
     
     def get_blk_thirty(self):
         if self.minutes_float != 0:
-            return (self.stl / self.minutes_float) * 30
+            return (self.blk / self.minutes_float) * 30
         return 0
     
     def get_to_thirty(self):
@@ -306,4 +327,3 @@ class Player(object):
     #### Need to create the function
     #### Need to add the function to the return list
     #### Need to add to the row header
-  
