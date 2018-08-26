@@ -323,7 +323,3 @@ class Player(object):
         if self.minutes_float != 0:
             return (self.plus_minus / self.minutes_float) * 30
         return 0      
-    
-    #### Need to create the function
-    #### Need to add the function to the return list
-    #### Need to add to the row header
