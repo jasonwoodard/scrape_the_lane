@@ -221,7 +221,7 @@ class Player(object):
             return self.plus_minus / self.games
         return 0
     
-    def effective_fg_percent(self):
+    def get_effective_fg_percent(self):
         coefficient = 0.5
         three_point_factor = coefficient * self.three_point_made
         efg = self.fg_made + three_point_factor
@@ -264,17 +264,17 @@ class Player(object):
     
     def get_oreb_thirty(self):
         if self.minutes_float != 0:
-            return (self.offensive_rebounds / self.minutes_float) * 30
+            return (self.offense_rebounds / self.minutes_float) * 30
         return 0
     
     def get_dreb_thirty(self):
         if self.minutes_float != 0:
-            return (self.defensive_rebounds / self.minutes_float) * 30
+            return (self.defense_rebounds / self.minutes_float) * 30
         return 0
     
     def get_treb_thirty(self):
         if self.minutes_float != 0:
-            return self.tr / self.minutes_float
+            return (self.tr / self.minutes_float) * 30
         return 0
     
     def get_ast_thirty(self):
@@ -289,7 +289,7 @@ class Player(object):
     
     def get_blk_thirty(self):
         if self.minutes_float != 0:
-            return (self.stl / self.minutes_float) * 30
+            return (self.blk / self.minutes_float) * 30
         return 0
     
     def get_to_thirty(self):
