@@ -57,8 +57,7 @@ class Player(object):
         'Blk30',
         'To30',
         'PF30',
-        '+ / - 30'
-
+        '+ / - 30',
     ]
 
     def __init__(self, player_row):
@@ -71,6 +70,7 @@ class Player(object):
         self.position = '' # The position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
         self.games = '' # Number of games played
         self.minutes = '' # Number of minutes played
+        self.minutes_float = 0 # Minutes value as a decimal
         self.fg = '' # Number of field goals made-attempted
         self.fg_made = 0 # Number of field goals made
         self.fg_attempted = 0 # Number of Field goal shots attempted
@@ -147,14 +147,13 @@ class Player(object):
             self.get_pts_thirty(),
             self.get_oreb_thirty(),
             self.get_dreb_thirty(),
-            self.get_tr_thirty(),
+            self.get_treb_thirty(), # Not sure this is the right function was get_tr_thirty()
             self.get_ast_thirty(),
             self.get_stl_thirty(),
             self.get_blk_thirty(),
             self.get_to_thirty(),
-            self.get_pf_thirty(),
+            self.get_fouls_thirty(),
             self.get_plus_minus_thirty()
-           
         ]
 
     def get_true_shot_percent(self):
@@ -224,7 +223,8 @@ class Player(object):
     
     def effective_fg_percent(self):
         coefficient = 0.5
-        efg = (self.fg_made + coefficient * self.three_point_made)
+        three_point_factor = coefficient * self.three_point_made
+        efg = self.fg_made + three_point_factor
         if self.fg_attempted != 0:
             return efg / self.fg_attempted
         return 0
@@ -240,80 +240,74 @@ class Player(object):
     def get_two_point_attempted(self):
         return self.fg_attempted - self.three_point_attempted
     
-    def get_two_point_pct():
+    def get_two_point_pct(self):
         # Here, I'm not sure how to reference the values returned by the previous functions.
+        # [JW] Use local variables to make your life easier.
         # I need to divide the result of  get_two_point_made by get_two_point_attempted
         # I also need to check for zero
-        two_pct = self.get_two_point_made()/self.get_two_point_attempted()
-        if two_pct != 0:
-            return two_pct
+        # [JW] Sure. local variables help with this and make your zero check easier.
+
+        two_point_made = self.get_two_point_made()
+        two_point_attempted = self.get_two_point_attempted()
+
+        if two_point_attempted != 0:
+            return two_point_made / two_point_attempted
         return 0
     
     ### PER 30 MINUTE STATS (PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus)
     ### Do I need a seperate function for each of these or could I return a list that then returns values that are assigned to spots on the emit function
     
     def get_pts_thirty(self):
-        pts_thirty = (self.pts / self.minutes) * 30
-        if pts_thirty != 0:
-            return pts_thirty
+        if self.minutes_float !=0:
+            return (self.pts / self.minutes_float) * 30
         return 0
     
     def get_oreb_thirty(self):
-        oreb_thirty = (self.offensive_rebounds / self.minutes) * 30
-        if oreb_thirty != 0:
-            return oreb_thirty
+        if self.minutes_float != 0:
+            return (self.offensive_rebounds / self.minutes_float) * 30
         return 0
     
     def get_dreb_thirty(self):
-        dreb_thirty = (self.defensive_rebounds / self.minutes) * 30
-        if dreb_thirty != 0:
-            return dreb_thirty
+        if self.minutes_float != 0:
+            return (self.defensive_rebounds / self.minutes_float) * 30
         return 0
     
     def get_treb_thirty(self):
-        treb_thirty = self.tr / self.minutes
-        if treb_thirty != 0:
-            return treb_thirty
+        if self.minutes_float != 0:
+            return self.tr / self.minutes_float
         return 0
     
     def get_ast_thirty(self):
-        ast_thirty = (self.ast / self.minutes) * 30
-        if ast_thirty != 0:
-            return ast_thirty
+        if self.minutes_float != 0:
+            return (self.ast / self.minutes_float) * 30
         return 0   
     
     def get_stl_thirty(self):
-        stl_thirty = (self.stl / self.minutes) * 30
-        if stl_thirty != 0:
-            return stl_thirty
+        if self.minutes_float != 0:
+            return (self.stl / self.minutes_float) * 30
         return 0  
     
     def get_blk_thirty(self):
-        blk_thirty = (self.stl / self.minutes) * 30
-        if blk_thirty != 0:
-            return blk_thirty
+        if self.minutes_float != 0:
+            return (self.stl / self.minutes_float) * 30
         return 0
     
     def get_to_thirty(self):
-        to_thirty = (self.to / self.minutes) * 30
-        if to_thirty != 0:
-            return to_thirty
+        if self.minutes_float != 0:
+            return (self.to / self.minutes_float) * 30
         return 0
     
     def get_fouls_thirty(self):
-        pf_thirty = (self.pf / self.minutes) * 30
-        if pf_thirty != 0:
-            return pf_thirty
+        if self.minutes_float != 0:
+            return (self.pf / self.minutes_float) * 30
         return 0  
     
     def get_plus_minus_thirty(self):
-        plus_minus_thirty = (self.plus_minus / self.minutes) * 30
-        if plus_minus_thirty != 0:
-            return plus_minus_thirty
+        if self.minutes_float != 0:
+            return (self.plus_minus / self.minutes_float) * 30
         return 0      
     
     #### Need to create the function
     #### Need to add the function to the return list
     #### Need to add to the row header
-    
-
+  
