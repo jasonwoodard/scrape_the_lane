@@ -163,33 +163,7 @@ class Player(object):
             return self.pts / (2 * shot_factor)
         return 0  # Return zero or is None better?
 
-# 100*Points / [2 * (FGA + .44*FTA) ]
-
-    # todo(woodard): Delete OLD version
-    def get_gamescore_old(self):
-        fg_attempted_factor = (0.4 * self.fg_attempted)
-        free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
-        or_factor = (0.7 * self.offense_rebounds)
-        dr_factor = (0.3 * self.defense_rebounds)
-        stl_factor = (1 * self.stl)
-        ast_factor = (0.7 * self.ast)
-        blk_factor = (0.7 * self.blk)
-        pf_factor = (0.4 * self.pf)
-        to_factor = (1 * self.to)
-        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
-
-    # todo(woodard): Delete OLD version
-    def get_km_gamescore_old(self):
-        fg_attempted_factor = (0.4 * self.fg_attempted)
-        free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
-        or_factor = (1.0 * self.offense_rebounds)
-        dr_factor = (0.5 * self.defense_rebounds)
-        stl_factor = (1.4 * self.stl)
-        ast_factor = (1.0 * self.ast)
-        blk_factor = (1.4 * self.blk)
-        pf_factor = (0.4 * self.pf)
-        to_factor = (1.4 * self.to)
-        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
+    # 100*Points / [2 * (FGA + .44*FTA) ]
 
     def get_gamescore(self):
         return self._calc_game_score(
@@ -319,51 +293,37 @@ class Player(object):
     # stand point you'll want to keep the named stat functions but they will all be one line of code.
     
     def get_pts_thirty(self):
-        if self.minutes_float !=0:
-            return (self.pts / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.pts)
     
     def get_oreb_thirty(self):
-        if self.minutes_float != 0:
-            return (self.offense_rebounds / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.offense_rebounds)
     
     def get_dreb_thirty(self):
-        if self.minutes_float != 0:
-            return (self.defense_rebounds / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.defense_rebounds)
     
     def get_treb_thirty(self):
-        if self.minutes_float != 0:
-            return (self.tr / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.tr)
     
     def get_ast_thirty(self):
-        if self.minutes_float != 0:
-            return (self.ast / self.minutes_float) * 30
-        return 0   
+        return self._calc_per_thirty(self.ast)
     
     def get_stl_thirty(self):
-        if self.minutes_float != 0:
-            return (self.stl / self.minutes_float) * 30
-        return 0  
+        return self._calc_per_thirty(self.stl)
     
     def get_blk_thirty(self):
-        if self.minutes_float != 0:
-            return (self.blk / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.blk)
     
     def get_to_thirty(self):
-        if self.minutes_float != 0:
-            return (self.to / self.minutes_float) * 30
-        return 0
-    
+        return self._calc_per_thirty(self.to)
+
     def get_fouls_thirty(self):
-        if self.minutes_float != 0:
-            return (self.pf / self.minutes_float) * 30
-        return 0  
-    
+        return self._calc_per_thirty(self.pf)
+
     def get_plus_minus_thirty(self):
-        if self.minutes_float != 0:
-            return (self.plus_minus / self.minutes_float) * 30
-        return 0      
+        return self._calc_per_thirty(self.plus_minus)
+
+    def _calc_per_thirty(self, numerator):
+        minutes = self.minutes_float
+        if minutes != 0:
+            return (numerator / minutes) * 30
+        return 0
