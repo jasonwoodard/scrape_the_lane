@@ -55,7 +55,7 @@ class TeamPlayerScraper:
 
         # Column 4 is a spacer column. Skip it.
 
-        player.games = self._get_content(cells, 5)
+        player.games = self._get_float_content(cells, 5)
         player.minutes = self._get_content(cells, 6)
         player.minutes_float = self.get_minutes_float(player.minutes)
 
@@ -92,15 +92,15 @@ class TeamPlayerScraper:
         player.free_throws_attempted = float(ft_split[1])
         player.free_throw_pct = self._get_content(cells, 12)
 
-        player.offense_rating = self._get_content(cells, 13)
-        player.defense_rating = self._get_content(cells, 14)
-        player.tr = self._get_content(cells, 15)
-        player.ast = self._get_content(cells, 16)
-        player.stl = self._get_content(cells, 17)
-        player.blk = self._get_content(cells, 18)
-        player.to = self._get_content(cells, 19)
-        player.pf = self._get_content(cells, 20)
-        player.plus_minus = self._get_content(cells, 21)
+        player.offense_rebounds = self._get_float_content(cells, 13)
+        player.defense_rebounds = self._get_float_content(cells, 14)
+        player.tr = self._get_float_content(cells, 15)
+        player.ast = self._get_float_content(cells, 16)
+        player.stl = self._get_float_content(cells, 17)
+        player.blk = self._get_float_content(cells, 18)
+        player.to = self._get_float_content(cells, 19)
+        player.pf = self._get_float_content(cells, 20)
+        player.plus_minus = self._get_float_content(cells, 21)
         player.pts = self._get_float_content(cells, 22)
 
         return player
