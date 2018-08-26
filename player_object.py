@@ -31,21 +31,21 @@ class Player(object):
         'PF',
         '+ / -',
         'Pts',
-        'True Shot %'
-        'EFG %'
-        '2P_Made'
-        '2P_Attempt'
-        '2P_%'
-        'PP30'
-        'OR30'
-        'DR30'
-        'TR30'
-        'Ast30'
-        'Stl30'
-        'Blk30'
-        'To30'
-        'PF30'
-        '+ / - 30'
+        'True Shot %',
+        'EFG %',
+        '2P_Made',
+        '2P_Attempt',
+        '2P_%',
+        'PP30',
+        'OR30',
+        'DR30',
+        'TR30',
+        'Ast30',
+        'Stl30',
+        'Blk30',
+        'To30',
+        'PF30',
+        '+ / - 30',
     ]
 
     def __init__(self, player_row):
@@ -105,8 +105,8 @@ class Player(object):
             self.free_throws_made,
             self.free_throws_attempted,
             self.free_throw_pct,
-            self.offense_rating,
-            self.defense_rating,
+            # self.offense_rating,
+            # self.defense_rating,
             self.tr,
             self.ast,
             self.stl,
@@ -123,12 +123,12 @@ class Player(object):
             self.get_pts_thirty(),
             self.get_oreb_thirty(),
             self.get_dreb_thirty(),
-            self.get_tr_thirty(),
+            self.get_treb_thirty(), # Not sure this is the right function was get_tr_thirty()
             self.get_ast_thirty(),
             self.get_stl_thirty(),
             self.get_blk_thirty(),
             self.get_to_thirty(),
-            self.get_pf_thirty(),
+            self.get_fouls_thirty(),
             self.get_plus_minus_thirty()
         ]
 
@@ -137,7 +137,7 @@ class Player(object):
         shot_factor = self.fg_attempted + (coefficient * self.free_throws_attempted)
         if shot_factor != 0:
             return self.pts / (2 * shot_factor)
-        return 0  # Return zero or is None better? --> I prefer zero as it will have the entire row be the same type of data.
+        return 0
     
     def effective_fg_percent(self):
         coefficient = 0.5
@@ -221,7 +221,7 @@ class Player(object):
         return 0  
     
     def get_plus_minus_thirty(self):
-        if self.minutes_float!= 0:
+        if self.minutes_float != 0:
             return (self.plus_minus / self.minutes_float) * 30
         return 0      
     
