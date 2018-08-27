@@ -98,8 +98,8 @@ class Player(object):
     def emit_row(self):
         return [
             self.name,
-            self.team.conference_id,
             self.team.name,
+            self.team.conference_id,
             self.year,
             self.height,
             self.position,
