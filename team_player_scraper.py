@@ -28,16 +28,22 @@ class TeamPlayerScraper:
     def _get_team(self, id):
         header = soup_kitchen.get_team_header(self.team_page_soup)
         name = self._get_team_name(header)
+        conf_id = self._get_team_conference(header)
 
         team = team_object.Team()
         team.id = id
         team.name = name
+        team.conference_id = conf_id
         return team
 
     @staticmethod
     def _get_team_name(element):
         name_element = element.find('span', {'class': 'h1'})
         return name_element.text
+
+    def _get_team_conference(self, element):
+        conf_element = element.find('a', {'class': 'conf'})
+        return conf_element.text.lstrip('Conf ')
 
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.
