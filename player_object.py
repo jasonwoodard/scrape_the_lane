@@ -284,14 +284,9 @@ class Player(object):
             return two_point_made / two_point_attempted
         return 0
     
-    ### PER 30 MINUTE STATS (PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus)
+    # PER 30 MINUTE STATS:
+    # PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus
 
-    # Do I need a seperate function for each of these or could I return a list that then returns values that are
-    # assigned to spots on the emit function.
-    # [JW] all of these functions look the same to me with on point of variance.
-    # Let me send a change that uses a helper function to do the work.  I think from a object ease of use
-    # stand point you'll want to keep the named stat functions but they will all be one line of code.
-    
     def get_pts_thirty(self):
         return self._calc_per_thirty(self.pts)
     
