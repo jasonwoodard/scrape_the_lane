@@ -2,6 +2,7 @@ class Player(object):
     RowHeader = [
         'Team Id',
         'Team Name',
+        'Team Conference',
         'Player Id',
         'Player Name',
         'Yr',
@@ -98,6 +99,7 @@ class Player(object):
         return [
             self.team.id,
             self.team.name,
+            self.team.conference_id,
             self.id,
             self.name,
             self.year,
