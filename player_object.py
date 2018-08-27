@@ -2,6 +2,7 @@ class Player(object):
     RowHeader = [
         'Player Name',
         'Team Name',
+        'Conf',
         'Yr',
         'Ht',
         'Pos',
@@ -98,6 +99,7 @@ class Player(object):
         return [
             self.name,
             self.team.name,
+            self.team.conference_id,
             self.year,
             self.height,
             self.position,
@@ -163,30 +165,48 @@ class Player(object):
             return self.pts / (2 * shot_factor)
         return 0  # Return zero or is None better?
 
-# 100*Points / [2 * (FGA + .44*FTA) ]
+    # 100*Points / [2 * (FGA + .44*FTA) ]
 
     def get_gamescore(self):
-        fg_attempted_factor = (0.4 * self.fg_attempted)
-        free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
-        or_factor = (0.7 * self.offense_rebounds)
-        dr_factor = (0.3 * self.defense_rebounds)
-        stl_factor = (1 * self.stl)
-        ast_factor = (0.7 * self.ast)
-        blk_factor = (0.7 * self.blk)
-        pf_factor = (0.4 * self.pf)
-        to_factor = (1 * self.to)
-        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
+        return self._calc_game_score(
+            or_coefficient=0.7,
+            dr_coefficient=0.3,
+            stl_coefficient=1.0,
+            ast_coefficient=0.7,
+            blk_coefficient=0.7,
+            pf_coefficient=0.4,
+            to_coefficient=1.0)
 
     def get_km_gamescore(self):
+        return self._calc_game_score(
+            or_coefficient=1.0,
+            dr_coefficient=0.5,
+            stl_coefficient=1.4,
+            ast_coefficient=1.0,
+            blk_coefficient=1.4,
+            pf_coefficient=0.4,
+            to_coefficient=1.4)
+
+    def _calc_game_score(self,
+                         or_coefficient,
+                         dr_coefficient,
+                         stl_coefficient,
+                         ast_coefficient,
+                         blk_coefficient,
+                         pf_coefficient,
+                         to_coefficient):
+        # fg and free throw are constant between gamescore and km_gamescore
         fg_attempted_factor = (0.4 * self.fg_attempted)
         free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
-        or_factor = (1.0 * self.offense_rebounds)
-        dr_factor = (0.5 * self.defense_rebounds)
-        stl_factor = (1.4 * self.stl)
-        ast_factor = (1.0 * self.ast)
-        blk_factor = (1.4 * self.blk)
-        pf_factor = (0.4 * self.pf)
-        to_factor = (1.4 * self.to)
+
+        # use the coefficients for each method to calculator the factor
+        or_factor = (or_coefficient * self.offense_rebounds)
+        dr_factor = (dr_coefficient * self.defense_rebounds)
+        stl_factor = (stl_coefficient * self.stl)
+        ast_factor = (ast_coefficient * self.ast)
+        blk_factor = (blk_coefficient * self.blk)
+        pf_factor = (pf_coefficient * self.pf)
+        to_factor = (to_coefficient * self.to)
         return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
     def get_ppg(self):
@@ -266,60 +286,41 @@ class Player(object):
             return two_point_made / two_point_attempted
         return 0
     
-    ### PER 30 MINUTE STATS (PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus)
+    # PER 30 MINUTE STATS:
+    # PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus
 
-    # Do I need a seperate function for each of these or could I return a list that then returns values that are
-    # assigned to spots on the emit function.
-    # [JW] all of these functions look the same to me with on point of variance.
-    # Let me send a change that uses a helper function to do the work.  I think from a object ease of use
-    # stand point you'll want to keep the named stat functions but they will all be one line of code.
-    
     def get_pts_thirty(self):
-        if self.minutes_float !=0:
-            return (self.pts / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.pts)
     
     def get_oreb_thirty(self):
-        if self.minutes_float != 0:
-            return (self.offense_rebounds / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.offense_rebounds)
     
     def get_dreb_thirty(self):
-        if self.minutes_float != 0:
-            return (self.defense_rebounds / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.defense_rebounds)
     
     def get_treb_thirty(self):
-        if self.minutes_float != 0:
-            return (self.tr / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.tr)
     
     def get_ast_thirty(self):
-        if self.minutes_float != 0:
-            return (self.ast / self.minutes_float) * 30
-        return 0   
+        return self._calc_per_thirty(self.ast)
     
     def get_stl_thirty(self):
-        if self.minutes_float != 0:
-            return (self.stl / self.minutes_float) * 30
-        return 0  
+        return self._calc_per_thirty(self.stl)
     
     def get_blk_thirty(self):
-        if self.minutes_float != 0:
-            return (self.blk / self.minutes_float) * 30
-        return 0
+        return self._calc_per_thirty(self.blk)
     
     def get_to_thirty(self):
-        if self.minutes_float != 0:
-            return (self.to / self.minutes_float) * 30
-        return 0
-    
+        return self._calc_per_thirty(self.to)
+
     def get_fouls_thirty(self):
-        if self.minutes_float != 0:
-            return (self.pf / self.minutes_float) * 30
-        return 0  
-    
+        return self._calc_per_thirty(self.pf)
+
     def get_plus_minus_thirty(self):
-        if self.minutes_float != 0:
-            return (self.plus_minus / self.minutes_float) * 30
-        return 0      
+        return self._calc_per_thirty(self.plus_minus)
+
+    def _calc_per_thirty(self, numerator):
+        minutes = self.minutes_float
+        if minutes != 0:
+            return (numerator / minutes) * 30
+        return 0
