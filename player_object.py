@@ -61,10 +61,9 @@ class Player(object):
        # 'FT',
     ]
 
-    def __init__(self, player_row):
-        self.row = player_row
-        self.team = None 
+    def __init__(self):
         self.id = -1  # The unique player identification number
+        self.team = None
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
         self.height = ''  # The height of the player in feet'inches

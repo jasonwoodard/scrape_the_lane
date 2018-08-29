@@ -47,7 +47,7 @@ class TeamPlayerScraper:
 
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.
-        player = player_object.Player(row)
+        player = player_object.Player()
 
         cells = row.find_all('td')
 
