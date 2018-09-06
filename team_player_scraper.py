@@ -56,7 +56,14 @@ class TeamPlayerScraper:
         player.id = self._get_player_id(cells[0])
         player.name = self._get_player_name(cells[0])
         player.year = self._get_content(cells, 1)
-        player.height = self._get_content(cells, 2)
+
+        # Height
+        height_raw = self._get_content(cells, 2)
+        player.height = height_raw
+        height_split = height_raw.split('-')
+        feet_inches = int(height_split[0]) * 12
+        player.height_inches = feet_inches + int(height_split[1])
+
         player.position = self._get_content(cells, 3)
 
         # Column 4 is a spacer column. Skip it.
