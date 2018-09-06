@@ -67,7 +67,8 @@ class Player(object):
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
         self.height = ''  # The height of the player in feet'inches
-        self.position = '' # The position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
+        self.height_inches = 0  # The height of the player in inches
+        self.position = '' # Position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
         self.games = 0  # Number of games played
         self.minutes = ''  # Number of minutes played as time value
         self.minutes_float = 0  # Minutes value as a decimal
