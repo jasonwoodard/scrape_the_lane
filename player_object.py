@@ -100,7 +100,7 @@ class Player(object):
             self.team.name,
             self.team.conference_id,
             self.year,
-            self.height,
+            self.height_inches,
             self.position,
             self.games,
             self.minutes,
