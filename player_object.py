@@ -1,7 +1,7 @@
 class Player(object):
     RowHeader = [
-        'Player Name',
-        'Team Name',
+        'Player',
+        'Team',
         'Conf',
         'Yr',
         'Ht',
@@ -22,7 +22,7 @@ class Player(object):
         '2P%',
         '3P%',
         'FT%',
-        'True Shot %',
+        'TS%',
         'EFG%',
         'GmSc',
         'KmGmSc',
@@ -63,7 +63,7 @@ class Player(object):
 
     def __init__(self, player_row):
         self.row = player_row
-        self.team = None 
+        self.team = None
         self.id = -1  # The unique player identification number
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
@@ -90,7 +90,7 @@ class Player(object):
         self.ast = 0  # Assists
         self.stl = 0  # Steals
         self.blk = 0  # Blocks
-        self.to = 0  # Turnovers 
+        self.to = 0  # Turnovers
         self.pf = 0  # Personal Foul
         self.plus_minus = 0  # Plus minus = Team Points - Opponent Points while player is on the court
         self.pts = 0  # Points
@@ -104,7 +104,7 @@ class Player(object):
             self.height,
             self.position,
             self.games,
-            self.minutes,
+            self.round_minutes(),
             self.get_ppg(),
             self.get_orpg(),
             self.get_drpg(),
@@ -162,7 +162,8 @@ class Player(object):
         coefficient = 0.475
         shot_factor = self.fg_attempted + (coefficient * self.free_throws_attempted)
         if shot_factor != 0:
-            return self.pts / (2 * shot_factor)
+            z = self.pts / (2 * shot_factor)
+            return round(z, 3)
         return 0  # Return zero or is None better?
 
     # 100*Points / [2 * (FGA + .44*FTA) ]
@@ -179,11 +180,11 @@ class Player(object):
 
     def get_km_gamescore(self):
         return self._calc_game_score(
-            or_coefficient=1.0,
-            dr_coefficient=0.5,
-            stl_coefficient=1.4,
-            ast_coefficient=1.0,
-            blk_coefficient=1.4,
+            or_coefficient=0.7,
+            dr_coefficient=0.3,
+            stl_coefficient=1.8,
+            ast_coefficient=1.2,
+            blk_coefficient=1.3,
             pf_coefficient=0.4,
             to_coefficient=1.4)
 
@@ -196,7 +197,8 @@ class Player(object):
                          pf_coefficient,
                          to_coefficient):
         # fg and free throw are constant between gamescore and km_gamescore
-        fg_attempted_factor = (0.4 * self.fg_attempted)
+        fg_made_factor = (0.4 * self.fg_made)
+        fg_attempted_factor = (0.7 * self.fg_attempted)
         free_throws_factor = 0.4 * (self.free_throws_attempted - self.free_throws_made)
 
         # use the coefficients for each method to calculator the factor
@@ -207,117 +209,145 @@ class Player(object):
         blk_factor = (blk_coefficient * self.blk)
         pf_factor = (pf_coefficient * self.pf)
         to_factor = (to_coefficient * self.to)
-        return self.pts + fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
+        return self.pts + fg_made_factor - fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
 
     def get_ppg(self):
         if self.games != 0 and self.pts != 0:
-            return self.pts / self.games
+            z = float(self.pts / self.games)
+            return round(z, 1)
         return 0
 
     def get_orpg(self):
         if self.games != 0 and self.offense_rebounds != 0:
-            return self.offense_rebounds / self.games
+            z = float(self.offense_rebounds / self.games)
+            return round(z, 1)
         return 0
 
     def get_drpg(self):
         if self.games != 0 and self.defense_rebounds != 0:
-            return self.defense_rebounds / self.games
+            z = float(self.defense_rebounds / self.games)
+            return round(z, 1)
         return 0
 
     def get_trpg(self):
         if self.games != 0 and self.tr != 0:
-            return self.tr / self.games
+            z = float(self.tr / self.games)
+            return round(z, 1)
         return 0
 
     def get_apg(self):
         if self.games != 0 and self.ast != 0:
-            return self.ast / self.games
+            z = float(self.ast / self.games)
+            return round(z, 1)
         return 0
 
     def get_spg(self):
         if self.games != 0 and self.stl != 0:
-            return self.stl / self.games
+            z = float(self.stl / self.games)
+            return round(z, 2)
         return 0
 
     def get_bpg(self):
         if self.games != 0 and self.blk != 0:
-            return self.blk / self.games
+            z = float(self.blk / self.games)
+            return round(z, 2)
         return 0
 
     def get_topg(self):
         if self.games != 0 and self.to != 0:
-            return self.to / self.games
+            z = float(self.to / self.games)
+            return round(z, 2)
         return 0
 
     def get_pfpg(self):
         if self.games != 0 and self.pf != 0:
-            return self.pf / self.games
+            z = (self.pf / self.games)
+            return round(z, 1)
         return 0
 
     def get_plus_minus_pg(self):
         if self.games != 0 and self.plus_minus != 0:
-            return self.plus_minus / self.games
+            z = float(self.plus_minus / self.games)
+            return round(z, 1)
         return 0
-    
+
     def get_effective_fg_percent(self):
         coefficient = 0.5
         three_point_factor = coefficient * self.three_point_made
         efg = self.fg_made + three_point_factor
         if self.fg_attempted != 0:
-            return efg / self.fg_attempted
+            z = float(efg / self.fg_attempted)
+            return round(z, 3)
         return 0
-   
+
     def get_two_point_made(self):
-        # Every shot taken is either a two point or three point field goal attempt.  
+        # Every shot taken is either a two point or three point field goal attempt.
         # Field goal attempts include both two point attempts and three point attempts.
         # Three point attempts are a sub-category of field goal attempts.
         # Since these are the only two types of shots, the formula is simple.
         # Since this is subtraction, we do not need to check for zero (because that'd be fine)
-        return self.fg_made - self.three_point_made
-    
+        z = float(self.fg_made - self.three_point_made)
+        return round(z, 2)
+
     def get_two_point_attempted(self):
-        return self.fg_attempted - self.three_point_attempted
-    
+        z = float(self.fg_attempted - self.three_point_attempted)
+        return round(z, 2)
+
     def get_two_point_pct(self):
         two_point_made = self.get_two_point_made()
         two_point_attempted = self.get_two_point_attempted()
 
         if two_point_attempted != 0:
-            return two_point_made / two_point_attempted
+            z = float(two_point_made / two_point_attempted)
+            return round(z, 3)
         return 0
-    
+
     # PER 30 MINUTE STATS:
     # PTS, Offensive REB, Defensive REB, Total REB, Assists, Steals, Blocks, Personal Fouls, plus/minus
 
     def get_pts_thirty(self):
-        return self._calc_per_thirty(self.pts)
-    
+        z = self._calc_per_thirty(self.pts)
+        return round(z, 1)
+
     def get_oreb_thirty(self):
-        return self._calc_per_thirty(self.offense_rebounds)
-    
+        z = self._calc_per_thirty(self.offense_rebounds)
+        return round(z, 1)
+
     def get_dreb_thirty(self):
-        return self._calc_per_thirty(self.defense_rebounds)
-    
+        z = self._calc_per_thirty(self.defense_rebounds)
+        return round(z, 1)
+
     def get_treb_thirty(self):
-        return self._calc_per_thirty(self.tr)
-    
+        z = self._calc_per_thirty(self.tr)
+        return round(z, 1)
+
     def get_ast_thirty(self):
-        return self._calc_per_thirty(self.ast)
-    
+        z = self._calc_per_thirty(self.ast)
+        return round(z, 2)
+
     def get_stl_thirty(self):
-        return self._calc_per_thirty(self.stl)
-    
+        z = self._calc_per_thirty(self.stl)
+        return round(z, 2)
+
     def get_blk_thirty(self):
-        return self._calc_per_thirty(self.blk)
-    
+        z = self._calc_per_thirty(self.blk)
+        return round(z, 2)
+
     def get_to_thirty(self):
-        return self._calc_per_thirty(self.to)
+        z = self._calc_per_thirty(self.to)
+        return round(z, 2)
 
     def get_fouls_thirty(self):
-        return self._calc_per_thirty(self.pf)
+        z = self._calc_per_thirty(self.pf)
+        return round(z, 1)
 
     def get_plus_minus_thirty(self):
-        return self._calc_per_thirty(self.plus_minus)
+        z = self._calc_per_thirty(self.plus_minus)
+        return round(z, 1)
+
+    def round_minutes(self):
+        z = self.minutes_float
+        return round(z,1)
 
     def _calc_per_thirty(self, numerator):
         minutes = self.minutes_float
