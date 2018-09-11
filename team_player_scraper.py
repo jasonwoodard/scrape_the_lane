@@ -2,22 +2,25 @@ import re
 
 import soup_kitchen
 import player_object
-import team_object
+
+from team_scraper import TeamScraper
 
 
 class TeamPlayerScraper:
     def __init__(self, team_page, team_id):
         self.team_page_soup = soup_kitchen.get_soup(team_page)
-        self.id = team_id
-        self.team = self._get_team(team_id)
+        self.team_id = team_id
 
     def get_team_player_data(self):
         players = []
 
+        team_scraper = TeamPlayerScraper(self.team_id, self.team_page_soup)
+        team = team_scraper.get_team()
+
         rows = self._get_player_rows()
         for row in rows:
             player = self._extract_player_row(row)
-            player.team = self.team
+            player.team = team
             players.append(player)
 
         return players
@@ -25,25 +28,16 @@ class TeamPlayerScraper:
     def _get_player_rows(self):
         return self.team_page_soup.select('tr.even, tr.odd')
 
-    def _get_team(self, id):
-        header = soup_kitchen.get_team_header(self.team_page_soup)
-        name = self._get_team_name(header)
-        conf_id = self._get_team_conference(header)
-
-        team = team_object.Team()
-        team.id = id
-        team.name = name
-        team.conference_id = conf_id
-        return team
-
-    @staticmethod
-    def _get_team_name(element):
-        name_element = element.find('span', {'class': 'h1'})
-        return name_element.text
-
-    def _get_team_conference(self, element):
-        conf_element = element.find('a', {'class': 'conf'})
-        return conf_element.text.lstrip('Conf ')
+    # def _get_team(self, team_id):
+    #     header = soup_kitchen.get_team_header(self.team_page_soup)
+    #     name = self._get_team_name(header)
+    #     conf_id = self._get_team_conference(header)
+    #
+    #     team = team_object.Team()
+    #     team.team_id = team_id
+    #     team.name = name
+    #     team.conference_id = conf_id
+    #     return team
 
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.

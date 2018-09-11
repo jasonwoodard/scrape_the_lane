@@ -28,10 +28,10 @@ def main(args):
     # Define array for the player objects we're going to scrape.
     players = []
 
-    # Define a team_id_counter counter to fetch teams by id to scrape the players.
+    # Define a team_id_counter counter to fetch teams by team_id to scrape the players.
     team_id_counter = 0
-    while team_id_counter < 256:  # maximum team id is 256
-        # Advance the team id counter so the first one is 1 and the last will be 256.
+    while team_id_counter < 256:  # maximum team team_id is 256
+        # Advance the team team_id counter so the first one is 1 and the last will be 256.
         team_id_counter += 1
 
         # Get team content
@@ -63,7 +63,7 @@ def build_team_url(team_id):
     """
     Builds the team URL from the URL constant
 
-    :param team_id: team id
+    :param team_id: team team_id
     :return: team specific url
     """
     return TEAM_URL.format(team_id)
