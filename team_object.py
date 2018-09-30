@@ -33,9 +33,6 @@ class Team(object):
         self.name = ''
         self.id = -1
         self.conference_id = -1
-<<<<<<< HEAD
-        # TODO(jwoodard) scrape additional fields
-=======
         self.gms = -1
         self.minutes = 0
         self.minutes_float = 0
@@ -91,4 +88,3 @@ class Team(object):
         # Catch if the header and the row length don't match.
         assert len(Team.RowHeader) == len(row)
         return row
->>>>>>> bc42f5e8e9033d575275478e6078216418d42e4e
