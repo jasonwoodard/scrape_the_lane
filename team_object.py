@@ -1,5 +1,6 @@
 
 class Team(object):
+
     RowHeader = [
         'name',
         'id',

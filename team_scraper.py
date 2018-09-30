@@ -74,7 +74,7 @@ class TeamScraper(object):
         return team_stats_cells, opponent_stats_cells,
 
     @classmethod
-    def get_minutes_float(minutes):
+    def get_minutes_float(cls, minutes):
         # expect minutes in string form like '00:00'
         parts = minutes.split(':')
         min_part = int(parts[0])
