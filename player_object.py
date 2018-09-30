@@ -5,6 +5,7 @@ class Player(object):
         'Conf',
         'Yr',
         'Ht',
+        'Inch',
         'Wt',
         'Pos',
         'Gms',
@@ -97,6 +98,10 @@ class Player(object):
         self.plus_minus = 0  # Plus minus = Team Points - Opponent Points while player is on the court
         self.pts = 0  # Points
 
+        # Sanity check that the row and the header are the same number of columns
+        row_check = self.emit_row()
+        assert len(row_check) == len(Player.RowHeader)
+
     def emit_row(self):
         return [
             self.name,
@@ -157,9 +162,9 @@ class Player(object):
             self.plus_minus,
             self.id,
             self.team.id,
-            #self.fg,
-            #self.three_point,
-            #self.free_throws,
+            # self.fg,
+            # self.three_point,
+            # self.free_throws,
         ]
 
     def get_true_shot_percent(self):
@@ -218,8 +223,6 @@ class Player(object):
         pf_factor = (pf_coefficient * self.pf)
         to_factor = (to_coefficient * self.to)
         return self.pts + fg_made_factor - fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
-
-
 
     def get_ppg(self):
         if self.games != 0 and self.pts != 0:
