@@ -19,6 +19,13 @@ class TeamScraper(object):
 
         return team
 
+    def _scrape_team_stats(self, team):
+        info_blocks = soup_kitchen.get_info_block_tables(self.team_page_soup)
+        record, rank, sos = self._get_current_team_stats(info_blocks)
+        team.current_season_record = record
+        team.current_season_rank = rank
+        team.current_season_sos = sos
+
     @staticmethod
     def _get_team_name(element):
         name_element = element.find('span', {'class': 'h1'})
@@ -29,24 +36,21 @@ class TeamScraper(object):
         conf_element = element.find('a', {'class': 'conf'})
         return conf_element.text.lstrip('Conf ')
 
-    def _scrape_team_stats(self, team):
-        info_blocks = soup_kitchen.get_info_block_tables(self.team_page_soup)
-        self._get_current_season_stats(info_blocks[0], team)
-
-    def _get_current_season_stats(self, info_block_table, team):
-        rows = info_block_table.find_all('tr')
-
+    @staticmethod
+    def _get_current_team_stats(info_block_table):
         # Record Row
         row = rows[0]
         cells = row.contents
-        team.current_season_record = cells[2].text
+        record = cells[2].text
 
         # Rank Row
         row = rows[1]
         cells = row.contents
-        team.current_season_rank = cells[1].text
+        rank = cells[1].text
 
         # SoS Row
         row = rows[2]
         cells = row.contents
-        team.current_season_sos = cells[1].text
+        sos = cells[1].text
+
+        return record, rank, sos,

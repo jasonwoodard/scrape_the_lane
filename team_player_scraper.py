@@ -14,7 +14,7 @@ class TeamPlayerScraper:
     def get_team_player_data(self):
         players = []
 
-        team_scraper = TeamPlayerScraper(self.team_id, self.team_page_soup)
+        team_scraper = TeamPlayerScraper(self.team_page_soup, self.team_id)
         team = team_scraper.get_team()
 
         rows = self._get_player_rows()
