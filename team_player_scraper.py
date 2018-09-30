@@ -47,7 +47,7 @@ class TeamPlayerScraper:
 
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.
-        player = player_object.Player(row)
+        player = player_object.Player()
 
         cells = row.find_all('td')
 
@@ -56,11 +56,18 @@ class TeamPlayerScraper:
         player.id = self._get_player_id(cells[0])
         player.name = self._get_player_name(cells[0])
         player.year = self._get_content(cells, 1)
-        player.height = self._get_content(cells, 2)
+
+        # Height
+        height_raw = self._get_content(cells, 2)
+        player.height = height_raw
+        height_split = height_raw.split('-')
+        feet_inches = int(height_split[0]) * 12
+        player.height_inches = feet_inches + int(height_split[1])
+        
         player.weight = self._get_content(cells, 3) # Added weight
         player.position = self._get_content(cells, 4) # renumbered to 4
 
-        # Column 4 is a spacer column. Skip it.
+        # Column 5 is a spacer column. Skip it.
 
         player.games = self._get_float_content(cells, 6)
         player.minutes = self._get_content(cells, 7)

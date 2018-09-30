@@ -62,10 +62,10 @@ class Player(object):
        # 'FT',
     ]
 
-    def __init__(self, player_row):
-        self.row = player_row
-        self.team = None
+
+    def __init__(self):
         self.id = -1  # The unique player identification number
+        self.team = None
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
         self.height = ''  # The height of the player in feet'inches
@@ -104,6 +104,7 @@ class Player(object):
             self.team.conference_id,
             self.year,
             self.height,
+            self.height_inches,
             self.weight,
             self.position,
             self.games,
@@ -172,6 +173,7 @@ class Player(object):
     # 100*Points / [2 * (FGA + .44*FTA) ]
 
     def get_gamescore(self):
+
         z = self._calc_game_score(
             or_coefficient=0.7,
             dr_coefficient=0.3,
@@ -192,6 +194,7 @@ class Player(object):
             pf_coefficient=0.4,
             to_coefficient=1.4)
         return round(z, 1)
+
 
     def _calc_game_score(self,
                          or_coefficient,
@@ -215,6 +218,7 @@ class Player(object):
         pf_factor = (pf_coefficient * self.pf)
         to_factor = (to_coefficient * self.to)
         return self.pts + fg_made_factor - fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
+
 
 
     def get_ppg(self):
@@ -361,11 +365,3 @@ class Player(object):
             return (numerator / minutes) * 30
         return 0
 
-
-        '''
-[AMS 9-11-18]: Updated game scores to provide rounded output numbers for easier viewing by end user.
-
-
-
-
-        '''
