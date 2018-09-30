@@ -20,6 +20,7 @@ class DataExporter(object):
             rows.append(obj.emit_row())
         return rows
 
+<<<<<<< HEAD
     @staticmethod
     def _get_file_name():
         return '{:%Y-%m-%d}.csv'.format(datetime.now())

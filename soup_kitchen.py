@@ -16,3 +16,23 @@ def get_rows(soup, selector):
 def get_team_header(soup):
     element = soup.find(id='team-header')
     return element
+
+
+def get_content(cells, index):
+    cell = cells[index]
+    value = cell.contents[0]
+    return value
+
+
+def get_int_content(cells, index):
+    return int(get_content(cells, index))
+
+
+def get_float_content(cells, index):
+    return float(get_content(cells, index))
+
+
+def get_split_data(cells, index, delimiter='-'):
+    content = get_content(cells, index)
+    parts = content.split(delimiter)
+    return parts[0], parts[1]

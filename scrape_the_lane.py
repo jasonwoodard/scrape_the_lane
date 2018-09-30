@@ -5,6 +5,7 @@ import team_player_scraper
 from argparse import ArgumentParser
 
 from player_object import Player
+from team_object import Team
 
 LOGIN_URL = 'http://drivethelane.com/'
 
@@ -27,6 +28,10 @@ def main(args):
 
     # Define array for the player objects we're going to scrape.
     players = []
+<<<<<<< HEAD
+=======
+    teams = []
+>>>>>>> bc42f5e8e9033d575275478e6078216418d42e4e
 
     # Define a team_id_counter counter to fetch teams by id to scrape the players.
     team_id_counter = 0
@@ -46,15 +51,33 @@ def main(args):
         # Add the players from this team
         players.extend(team_players)
 
+<<<<<<< HEAD
         # Print a summary of the results of the team scrape to console to monitor progress.
         print('Team Id: {0}'.format(team_id_counter))
         print('Team {0} Players: {1} '.format(team_id_counter, len(team_players)))
         print('Total Players: {0}'.format(len(players)))
 
+=======
+        # Grab the team off the first player and add to teams array.
+        teams.append(team_players[0].team)
+
+        # Print a summary of the results of the team scrape to console to monitor progress.
+        print('Team Id: {0}'.format(team_id_counter))
+        print('Team {0} Players: {1} '.format(team_id_counter, len(team_players)))
+        print('Total Players: {0}'.format(len(players)))
+
+>>>>>>> bc42f5e8e9033d575275478e6078216418d42e4e
     print('Scrape complete.\n-----------------------\n Starting export to CSV')
     # Instantiate a data exporter object and write to CSV.
     exporter = DataExporter()
+    exporter.file_prefix = 'players-'
     exporter.write_to_csv(Player.RowHeader, players)
+    print('Export to CSV complete.')
+    print('Script complete.\n-----------------------')
+
+    exporter.file_prefix = 'teams-'
+    exporter.write_to_csv(Team.RowHeader, teams)
+
     print('Export to CSV complete.')
     print('Script complete.\n-----------------------')
 
