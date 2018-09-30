@@ -5,6 +5,7 @@ class Player(object):
         'Conf',
         'Yr',
         'Ht',
+        'Inch',
         'Wt',
         'Pos',
         'Gms',
@@ -69,7 +70,8 @@ class Player(object):
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
         self.height = ''  # The height of the player in feet'inches
-        self.weight = '' # The weight of the player in pounds
+        self.height_inches = 0
+        self.weight = 0  # The weight of the player in pounds
         self.position = '' # The position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
         self.games = 0  # Number of games played
         self.minutes = ''  # Number of minutes played as time value
@@ -98,7 +100,7 @@ class Player(object):
         self.pts = 0  # Points
 
     def emit_row(self):
-        return [
+        row_content = [
             self.name,
             self.team.name,
             self.team.conference_id,
@@ -157,10 +159,14 @@ class Player(object):
             self.plus_minus,
             self.id,
             self.team.id,
-            #self.fg,
-            #self.three_point,
-            #self.free_throws,
+            # self.fg,
+            # self.three_point,
+            # self.free_throws,
         ]
+        # Sanity check that the row and the header are the same number of columns
+        # TODO(jwoodard): Find a better place for this assertion.
+        assert len(row_content) == len(Player.RowHeader)
+        return row_content
 
     def get_true_shot_percent(self):
         coefficient = 0.475
@@ -218,8 +224,6 @@ class Player(object):
         pf_factor = (pf_coefficient * self.pf)
         to_factor = (to_coefficient * self.to)
         return self.pts + fg_made_factor - fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
-
-
 
     def get_ppg(self):
         if self.games != 0 and self.pts != 0:
@@ -364,4 +368,3 @@ class Player(object):
         if minutes != 0:
             return (numerator / minutes) * 30
         return 0
-
