@@ -24,3 +24,5 @@ class DataExporter(object):
     @staticmethod
     def _get_file_name():
         return '{:%Y-%m-%d}.csv'.format(datetime.now())
+=======
+>>>>>>> bc42f5e8e9033d575275478e6078216418d42e4e
