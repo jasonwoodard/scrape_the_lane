@@ -5,6 +5,9 @@ from datetime import datetime
 
 class DataExporter(object):
 
+    def __init__(self):
+        self.file_prefix = ''
+
     def write_to_csv(self, header, row_objects):
         values = self._get_rows_from_objects(row_objects)
         rows = [header]
@@ -20,6 +23,5 @@ class DataExporter(object):
             rows.append(obj.emit_row())
         return rows
 
-    @staticmethod
-    def _get_file_name():
-        return '{:%Y-%m-%d}.csv'.format(datetime.now())
+    def _get_file_name(self):
+        return '{0}{1:%Y-%m-%d}.csv'.format(self.file_prefix, datetime.now())

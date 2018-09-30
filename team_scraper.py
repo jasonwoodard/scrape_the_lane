@@ -22,7 +22,8 @@ class TeamScraper(object):
 
         # Cells 0 - 5 are labels and empty
         team.gms = kitchen.get_int_content(team_stats_cells, 6)
-        team.min = kitchen.get_content(team_stats_cells, 7)
+        team.minutes = kitchen.get_content(team_stats_cells, 7)
+        team.minutes_float = self.get_minutes_float(team.minutes)
 
         team.fg = kitchen.get_content(team_stats_cells, 8)
         fg_made, fg_attempt = kitchen.get_split_data(team_stats_cells[8])
@@ -71,3 +72,11 @@ class TeamScraper(object):
         team_stats_cells = footer_rows[0].findall('td')
         opponent_stats_cells = footer_rows[1].findall('td')
         return team_stats_cells, opponent_stats_cells,
+
+    @classmethod
+    def get_minutes_float(minutes):
+        # expect minutes in string form like '00:00'
+        parts = minutes.split(':')
+        min_part = int(parts[0])
+        sec_part = int(parts[1])
+        return min_part + (sec_part / 60)

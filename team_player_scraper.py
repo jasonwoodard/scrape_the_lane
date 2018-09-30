@@ -28,17 +28,6 @@ class TeamPlayerScraper:
     def _get_player_rows(self):
         return self.team_page_soup.select('tr.even, tr.odd')
 
-    # def _get_team(self, team_id):
-    #     header = soup_kitchen.get_team_header(self.team_page_soup)
-    #     name = self._get_team_name(header)
-    #     conf_id = self._get_team_conference(header)
-    #
-    #     team = team_object.Team()
-    #     team.team_id = team_id
-    #     team.name = name
-    #     team.conference_id = conf_id
-    #     return team
-
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.
         player = player_object.Player()
@@ -65,7 +54,7 @@ class TeamPlayerScraper:
 
         player.games = kitchen.get_float_content(cells, 6)
         player.minutes = kitchen.get_content(cells, 7)
-        player.minutes_float = self.get_minutes_float(player.minutes)
+        player.minutes_float = TeamScraper.get_minutes_float(player.minutes)
 
         # Field Goals
         # Get the 'raw' value shown on screen and put it on the player object.
@@ -126,10 +115,4 @@ class TeamPlayerScraper:
         # if a match is found return value otherwise return -1
         return matches.group(1) if matches else -1
 
-    @staticmethod
-    def get_minutes_float(minutes):
-        # expect minutes in string form like '00:00'
-        parts = minutes.split(':')
-        min_part = int(parts[0])
-        sec_part = int(parts[1])
-        return min_part + (sec_part/60)
+
