@@ -70,7 +70,8 @@ class Player(object):
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
         self.height = ''  # The height of the player in feet'inches
-        self.weight = '' # The weight of the player in pounds
+        self.height_inches = 0
+        self.weight = 0  # The weight of the player in pounds
         self.position = '' # The position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
         self.games = 0  # Number of games played
         self.minutes = ''  # Number of minutes played as time value
@@ -98,12 +99,8 @@ class Player(object):
         self.plus_minus = 0  # Plus minus = Team Points - Opponent Points while player is on the court
         self.pts = 0  # Points
 
-        # Sanity check that the row and the header are the same number of columns
-        row_check = self.emit_row()
-        assert len(row_check) == len(Player.RowHeader)
-
     def emit_row(self):
-        return [
+        row_content = [
             self.name,
             self.team.name,
             self.team.conference_id,
@@ -166,6 +163,10 @@ class Player(object):
             # self.three_point,
             # self.free_throws,
         ]
+        # Sanity check that the row and the header are the same number of columns
+        # TODO(jwoodard): Find a better place for this assertion.
+        assert len(row_content) == len(Player.RowHeader)
+        return row_content
 
     def get_true_shot_percent(self):
         coefficient = 0.475
