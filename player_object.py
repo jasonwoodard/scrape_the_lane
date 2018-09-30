@@ -5,6 +5,7 @@ class Player(object):
         'Conf',
         'Yr',
         'Ht',
+        'Wt',
         'Pos',
         'Gms',
         'Min',
@@ -68,6 +69,7 @@ class Player(object):
         self.name = ''  # Player's name
         self.year = ''  # The class the player is in college (Fr = Freshman, So = Sophomore, Jr = Junior, Se = Senior)
         self.height = ''  # The height of the player in feet'inches
+        self.weight = '' # The weight of the player in pounds
         self.position = '' # The position the player is currently playings (PG, SG, SF, PF, C, bPG, bSG, bSF, bPF, bC, NA)
         self.games = 0  # Number of games played
         self.minutes = ''  # Number of minutes played as time value
@@ -102,6 +104,7 @@ class Player(object):
             self.team.conference_id,
             self.year,
             self.height,
+            self.weight,
             self.position,
             self.games,
             self.round_minutes(),
@@ -169,7 +172,7 @@ class Player(object):
     # 100*Points / [2 * (FGA + .44*FTA) ]
 
     def get_gamescore(self):
-        return self._calc_game_score(
+        z = self._calc_game_score(
             or_coefficient=0.7,
             dr_coefficient=0.3,
             stl_coefficient=1.0,
@@ -177,9 +180,10 @@ class Player(object):
             blk_coefficient=0.7,
             pf_coefficient=0.4,
             to_coefficient=1.0)
+        return round(z, 1)
 
     def get_km_gamescore(self):
-        return self._calc_game_score(
+        z = self._calc_game_score(
             or_coefficient=0.7,
             dr_coefficient=0.3,
             stl_coefficient=1.8,
@@ -187,6 +191,7 @@ class Player(object):
             blk_coefficient=1.3,
             pf_coefficient=0.4,
             to_coefficient=1.4)
+        return round(z, 1)
 
     def _calc_game_score(self,
                          or_coefficient,
@@ -210,6 +215,7 @@ class Player(object):
         pf_factor = (pf_coefficient * self.pf)
         to_factor = (to_coefficient * self.to)
         return self.pts + fg_made_factor - fg_attempted_factor - free_throws_factor + or_factor + dr_factor + stl_factor + ast_factor + blk_factor - pf_factor - to_factor
+
 
     def get_ppg(self):
         if self.games != 0 and self.pts != 0:
@@ -354,3 +360,12 @@ class Player(object):
         if minutes != 0:
             return (numerator / minutes) * 30
         return 0
+
+
+        '''
+[AMS 9-11-18]: Updated game scores to provide rounded output numbers for easier viewing by end user.
+
+
+
+
+        '''
