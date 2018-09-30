@@ -28,10 +28,12 @@ class TeamPlayerScraper:
     def _get_team(self, id):
         header = soup_kitchen.get_team_header(self.team_page_soup)
         name = self._get_team_name(header)
+        conf_id = self._get_team_conference(header)
 
         team = team_object.Team()
         team.id = id
         team.name = name
+        team.conference_id = conf_id
         return team
 
     @staticmethod
@@ -39,9 +41,13 @@ class TeamPlayerScraper:
         name_element = element.find('span', {'class': 'h1'})
         return name_element.text
 
+    def _get_team_conference(self, element):
+        conf_element = element.find('a', {'class': 'conf'})
+        return conf_element.text.lstrip('Conf ')
+
     def _extract_player_row(self, row):
         # Attach row to player object incase we need it later.
-        player = player_object.Player(row)
+        player = player_object.Player()
 
         cells = row.find_all('td')
 
@@ -50,17 +56,26 @@ class TeamPlayerScraper:
         player.id = self._get_player_id(cells[0])
         player.name = self._get_player_name(cells[0])
         player.year = self._get_content(cells, 1)
-        player.height = self._get_content(cells, 2)
-        player.position = self._get_content(cells, 3)
 
-        # Column 4 is a spacer column. Skip it.
+        # Height
+        height_raw = self._get_content(cells, 2)
+        player.height = height_raw
+        height_split = height_raw.split('-')
+        feet_inches = int(height_split[0]) * 12
+        player.height_inches = feet_inches + int(height_split[1])
+        
+        player.weight = self._get_content(cells, 3) # Added weight
+        player.position = self._get_content(cells, 4) # renumbered to 4
 
-        player.games = self._get_content(cells, 5)
-        player.minutes = self._get_content(cells, 6)
+        # Column 5 is a spacer column. Skip it.
+
+        player.games = self._get_float_content(cells, 6)
+        player.minutes = self._get_content(cells, 7)
+        player.minutes_float = self.get_minutes_float(player.minutes)
 
         # Field Goals
         # Get the 'raw' value shown on screen and put it on the player object.
-        fg_raw = self._get_content(cells, 7)
+        fg_raw = self._get_content(cells, 8)
         player.fg = fg_raw
 
         # Field Goals split out
@@ -68,38 +83,39 @@ class TeamPlayerScraper:
         fg_split = fg_raw.split('-')
         player.fg_made = float(fg_split[0])
         player.fg_attempted = float(fg_split[1])
-        player.fg_pct = self._get_content(cells, 8)
+        player.fg_pct = self._get_content(cells, 9)
 
         # Three Pointers
-        three_p_raw = self._get_content(cells, 9)
+        three_p_raw = self._get_content(cells, 10)
         player.three_point = three_p_raw
 
         # Three Pointer split out
         three_p_split = three_p_raw.split('-')
-        player.three_point_made = three_p_split[0]
+        player.three_point_made = float(three_p_split[0])
         player.three_point_attempted = float(three_p_split[1])
-        player.three_point_pct = self._get_content(cells, 10)
+        player.three_point_pct = self._get_content(cells, 11)
 
         # Free Throws
-        ft_raw = self._get_content(cells, 11)
+        ft_raw = self._get_content(cells, 12)
         player.free_throws = ft_raw
 
         # Free Throws split out
-        ft_split = fg_raw.split('-')
+        # ft_split = fg_raw.split('-')
+        ft_split = ft_raw.split('-')
         player.free_throws_made = float(ft_split[0])
         player.free_throws_attempted = float(ft_split[1])
-        player.free_throws_pct = self._get_content(cells, 12)
+        player.free_throw_pct = self._get_content(cells, 13)
 
-        player.offense_rating = self._get_content(cells, 13)
-        player.defense_rating = self._get_content(cells, 14)
-        player.tr = self._get_content(cells, 15)
-        player.ast = self._get_content(cells, 16)
-        player.stl = self._get_content(cells, 17)
-        player.blk = self._get_content(cells, 18)
-        player.to = self._get_content(cells, 19)
-        player.pf = self._get_content(cells, 20)
-        player.plus_minus = self._get_content(cells, 21)
-        player.pts = self._get_float_content(cells, 22)
+        player.offense_rebounds = self._get_float_content(cells, 14)
+        player.defense_rebounds = self._get_float_content(cells, 15)
+        player.tr = self._get_float_content(cells, 16)
+        player.ast = self._get_float_content(cells, 17)
+        player.stl = self._get_float_content(cells, 18)
+        player.blk = self._get_float_content(cells, 19)
+        player.to = self._get_float_content(cells, 20)
+        player.pf = self._get_float_content(cells, 21)
+        player.plus_minus = self._get_float_content(cells, 22)
+        player.pts = self._get_float_content(cells, 23)
 
         return player
 
@@ -131,3 +147,11 @@ class TeamPlayerScraper:
         content = self._get_content(split_td)
         parts = content.split(delimiter)
         return parts[0], parts[1]
+
+    @staticmethod
+    def get_minutes_float(minutes):
+        # expect minutes in string form like '00:00'
+        parts = minutes.split(':')
+        min_part = int(parts[0])
+        sec_part = int(parts[1])
+        return min_part + (sec_part/60)
