@@ -32,7 +32,7 @@ def get_float_content(cells, index):
     return float(get_content(cells, index))
 
 
-def get_split_data(split_td, delimiter='-'):
-    content = get_content(split_td)
+def get_split_data(cells, index, delimiter='-'):
+    content = get_content(cells, index)
     parts = content.split(delimiter)
     return parts[0], parts[1]

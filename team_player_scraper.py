@@ -47,8 +47,8 @@ class TeamPlayerScraper:
         feet_inches = int(height_split[0]) * 12
         player.height_inches = feet_inches + int(height_split[1])
         
-        player.weight = kitchen.get_content(cells, 3) # Added weight
-        player.position = kitchen.get_content(cells, 4) # renumbered to 4
+        player.weight = kitchen.get_content(cells, 3)  # Added weight
+        player.position = kitchen.get_content(cells, 4)  # renumbered to 4
 
         # Column 5 is a spacer column. Skip it.
 
@@ -102,11 +102,13 @@ class TeamPlayerScraper:
 
         return player
 
-    def _get_player_name(self, name_td):
+    @staticmethod
+    def _get_player_name(name_td):
         # <a href="player?pid=p9DE5067489" class="player">Joseph Piccione</a>
         return name_td.find('a').text
 
-    def _get_player_id(self, name_td):
+    @staticmethod
+    def _get_player_id(name_td):
         # <a href="player?pid=p9DE5067489" class="player">Joseph Piccione</a>
         href = name_td.find('a')['href']
         # href should be 'player?pid=p9DE5067489'
@@ -114,5 +116,3 @@ class TeamPlayerScraper:
         matches = re.search(r'pid=(p\w+)', href)
         # if a match is found return value otherwise return -1
         return matches.group(1) if matches else -1
-
-

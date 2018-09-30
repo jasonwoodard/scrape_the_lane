@@ -10,6 +10,7 @@ class Team(object):
         'FG',
         'FGM',
         'FGA',
+        'FG%',
         '3P',
         '3PM',
         '3PA',
@@ -57,12 +58,11 @@ class Team(object):
         self.pts = 0
 
     def emit_row(self):
-        return [
+        row = [
             self.name,
             self.id,
             self.conference_id,
             self.gms,
-            self.minutes,
             self.minutes_float,
             self.fg,
             self.fg_made,
@@ -85,3 +85,6 @@ class Team(object):
             self.plus_minus,
             self.pts
         ]
+        # Catch if the header and the row length don't match.
+        assert len(Team.RowHeader) == len(row)
+        return row

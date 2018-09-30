@@ -26,19 +26,19 @@ class TeamScraper(object):
         team.minutes_float = self.get_minutes_float(team.minutes)
 
         team.fg = kitchen.get_content(team_stats_cells, 8)
-        fg_made, fg_attempt = kitchen.get_split_data(team_stats_cells[8])
+        fg_made, fg_attempt = kitchen.get_split_data(team_stats_cells, 8)
         team.fg_made = fg_made
         team.fg_attempted = fg_attempt
         team.fg_pct = kitchen.get_content(team_stats_cells, 9)
 
         team.three_point = kitchen.get_content(team_stats_cells, 10)
-        three_point_made, three_point_attempt = kitchen.get_split_data(team_stats_cells[10])
+        three_point_made, three_point_attempt = kitchen.get_split_data(team_stats_cells, 10)
         team.three_point_made = three_point_made
         team.three_point_attempted = three_point_attempt
         team.three_point_pct = kitchen.get_content(team_stats_cells, 11)
 
         team.ft = kitchen.get_content(team_stats_cells, 12)
-        ft_made, ft_attempt = kitchen.get_split_data(team_stats_cells[12])
+        ft_made, ft_attempt = kitchen.get_split_data(team_stats_cells, 12)
         team.ft_made = ft_made
         team.ft_attempted = ft_attempt
         team.ft_pct = kitchen.get_content(team_stats_cells, 13)
@@ -54,7 +54,6 @@ class TeamScraper(object):
 
         return team
 
-
     @staticmethod
     def _get_team_name(element):
         name_element = element.find('span', {'class': 'h1'})
@@ -68,9 +67,10 @@ class TeamScraper(object):
     @staticmethod
     def _scrape_team_totals_rows(team_soup):
         footer_rows = team_soup.select('#team-stats tfoot tr')
-        print(footer_rows)
-        team_stats_cells = footer_rows[0].findall('td')
-        opponent_stats_cells = footer_rows[1].findall('td')
+
+        # row 0 is just a spacer.
+        team_stats_cells = footer_rows[1].find_all('td')
+        opponent_stats_cells = footer_rows[2].find_all('td')
         return team_stats_cells, opponent_stats_cells,
 
     @classmethod

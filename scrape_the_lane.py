@@ -5,6 +5,7 @@ import team_player_scraper
 from argparse import ArgumentParser
 
 from player_object import Player
+from team_object import Team
 
 LOGIN_URL = 'http://drivethelane.com/'
 
@@ -48,7 +49,7 @@ def main(args):
         players.extend(team_players)
 
         # Grab the team off the first player and add to teams array.
-        teams.extend(team_players[0].team)
+        teams.append(team_players[0].team)
 
         # Print a summary of the results of the team scrape to console to monitor progress.
         print('Team Id: {0}'.format(team_id_counter))
