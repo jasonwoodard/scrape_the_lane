@@ -47,10 +47,47 @@ class TeamScraper(object):
         team.dr = kitchen.get_int_content(team_stats_cells, 15)
         team.tr = kitchen.get_int_content(team_stats_cells, 16)
         team.ast = kitchen.get_int_content(team_stats_cells, 17)
-        team.blk = kitchen.get_int_content(team_stats_cells, 18)
-        team.pf = kitchen.get_int_content(team_stats_cells, 19)
-        team.plus_minus = kitchen.get_int_content(team_stats_cells, 20)
-        team.pts = kitchen.get_int_content(team_stats_cells, 21)
+        team.stl = kitchen.get_int_content(team_stats_cells, 18)
+        team.blk = kitchen.get_int_content(team_stats_cells, 19)
+        team.to = kitchen.get_int_content(team_stats_cells, 20)
+        team.pf = kitchen.get_int_content(team_stats_cells, 21)
+        team.plus_minus = kitchen.get_int_content(team_stats_cells, 22)
+        team.pts = kitchen.get_int_content(team_stats_cells, 23)
+
+        # ADDING OPPONENT ROW FROM SITE
+        # Cells 0 - 5 are labels and empty
+        team.opp_gms = kitchen.get_int_content(opponent_stats_cells, 6)
+        team.opp_minutes = kitchen.get_content(opponent_stats_cells, 7)
+        team.opp_minutes_float = self.get_minutes_float(team.opp_minutes)
+
+        team.opp_fg = kitchen.get_content(opponent_stats_cells, 8)
+        opp_fg_made, opp_fg_attempt = kitchen.get_split_data(opponent_stats_cells, 8)
+        team.opp_fg_made = opp_fg_made
+        team.opp_fg_attempted = opp_fg_attempt
+        team.opp_fg_pct = kitchen.get_content(opponent_stats_cells, 9)
+
+        team.opp_three_point = kitchen.get_content(opponent_stats_cells, 10)
+        opp_three_point_made, opp_three_point_attempt = kitchen.get_split_data(opponent_stats_cells, 10)
+        team.opp_three_point_made = opp_three_point_made
+        team.opp_three_point_attempted = opp_three_point_attempt
+        team.opp_three_point_pct = kitchen.get_content(opponent_stats_cells, 11)
+
+        team.opp_ft = kitchen.get_content(opponent_stats_cells, 12)
+        opp_ft_made, opp_ft_attempt = kitchen.get_split_data(opponent_stats_cells, 12)
+        team.opp_ft_made = opp_ft_made
+        team.opp_ft_attempted = opp_ft_attempt
+        team.opp_ft_pct = kitchen.get_content(opponent_stats_cells, 13)
+
+        team.opp_oreb = kitchen.get_int_content(opponent_stats_cells, 14)
+        team.opp_dr = kitchen.get_int_content(opponent_stats_cells, 15)
+        team.opp_tr = kitchen.get_int_content(opponent_stats_cells, 16)
+        team.opp_ast = kitchen.get_int_content(opponent_stats_cells, 17)
+        team.opp_stl = kitchen.get_int_content(opponent_stats_cells, 18)
+        team.opp_blk = kitchen.get_int_content(opponent_stats_cells, 19)
+        team.opp_to = kitchen.get_int_content(opponent_stats_cells, 20)
+        team.opp_pf = kitchen.get_int_content(opponent_stats_cells, 21)
+        team.opp_plus_minus = kitchen.get_int_content(opponent_stats_cells, 22)
+        team.opp_pts = kitchen.get_int_content(opponent_stats_cells, 23)
 
         return team
 
