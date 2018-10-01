@@ -185,6 +185,65 @@ df1['opp_tmFTrate'] = df1['opp_FTA'] / df1['opp_FGA']
 df1['Off_Eff'] = (df1['PTS'] / df1['Poss']) * 100
 df1['Def_Eff'] = (df1['opp_PTS'] / df1['Poss']) * 100
 
+
+# ********************** Three Point Rate   *** ****************************
+# Three point attempt percentage (How often a team attempts a three pointer)
+# Team three point attempts / Team Field Goal Attempts
+
+df1['3PA%'] = df1['3PA'] / df1['FGA']
+## NOTE: Opponents' three point attempt rate
+df1['opp_3PA%'] = df1['opp_3PA'] / df1['opp_FGA']
+
+
+# ********************** POINT DISTRIBUTION   *** ****************************
+# How to calculate total points for each type of shot
+# Total points = df1['PTS']
+# Free throw points = df1['FTM'] / Total points
+# Three pointer points = (df1['3PM'] * 3) / Total points
+# 2 Pointer points = Total Points - free throw points - three pointer points / total points
+
+df1['FTP%'] = df1['FTM'] / df1['PTS']
+df1['3PP%'] = (df1['3PM'] * 3) / df1['PTS']
+df1['2PP%'] = (df1['PTS'] - (df1['FTM'] + (df1['3PM'] * 3))) / df1['PTS']
+
+# NOTE: Opponents' point distribution
+df1['opp_FTP%'] = df1['opp_FTM'] / df1['opp_PTS']
+df1['opp_3PP%'] = (df1['opp_3PM'] * 3) / df1['opp_PTS']
+df1['opp_2PP%'] = (df1['opp_PTS'] - (df1['opp_FTM'] + (df1['opp_3PM'] * 3))) / df1['opp_PTS']
+
+
+### ******************** RANKINGS *********************************************
+# NOTE: Offensive Eff Ranking
+df1 = df1.sort_values(['Off_Eff'], ascending=[False])
+df1['oe_rnk'] = range(1, len(df1) + 1)
+# NOTE: Defensive Eff Ranking
+df1 = df1.sort_values(['Def_Eff'], ascending=[True])
+df1['de_rnk'] = range(1, len(df1) + 1)
+# NOTE: Total Ranking
+df1['total_rnk'] = df1['oe_rnk'] + df1['de_rnk']
+df1 = df1.sort_values(['total_rnk'], ascending=[True])
+df1['total_rnk'] = range(1, len(df1) + 1)
+
+
+###### ********* ###### ********* ###### ******* ##### ******** ##### *********
+# ******************* ROUND VALUES PRIOR TO OUTPUT ****************************
+df1 = df1.round({'minutes': 1, 'opp_minutes': 1, 'tmTS': 3, 'opp_tmTS': 3, 'TS_dif': 3, 'tmEFG': 3, 'opp_tmEFG': 3,
+'EFG_dif': 3, 'tmOR%': 3, 'opp_tmOR%': 3, 'tmAst%': 3, 'opp_tmAst%': 3, 'Poss': 0, 'Poss_pg': 1, 'tempo': 2, 't40':1,
+'tmStl%': 3, 'opp_tmStl%': 3, 'tmBlk%': 3, 'opp_tmBlk%': 3, 'tmTo%': 3, 'opp_tmTo%': 3, 'tmFTrate': 3, 'opp_tmFTrate': 3,
+'Off_Eff': 2, 'Def_Eff': 2, '3PA%': 3, 'opp_3PA%': 3, 'FTP%': 3, 'opp_FTP%': 3, '3PP%': 3, 'opp_3PP%': 3, '2PP%': 3,
+'opp_2PP%': 3})
+
+
+del df1['shot_factor']
+del df1['coefficient']
+del df1['three_point_factor']
+del df1['part_one']
+del df1['part_two']
+del df1['tempo_team']
+del df1['tempo_opp']
+
+
+
 ###########
 #Write the results of the dataframe to csv
 # add a timestamp to the file name
