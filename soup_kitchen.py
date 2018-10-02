@@ -25,7 +25,8 @@ def get_content(cells, index):
 
 
 def get_int_content(cells, index):
-    return int(get_content(cells, index))
+    content = get_content(cells, index)
+    return int(content.replace(',', ''))
 
 
 def get_float_content(cells, index):
