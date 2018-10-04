@@ -34,6 +34,6 @@ def get_float_content(cells, index):
 
 
 def get_split_data(cells, index, delimiter='-'):
-    content = get_content(cells, index)
+    content = get_content(cells, index).replace(',', '')
     parts = content.split(delimiter)
     return parts[0], parts[1]
