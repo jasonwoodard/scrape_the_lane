@@ -69,15 +69,16 @@ class TeamScheuleScraper:
         schedule.conf_losses = kitchen.get_content(cells, 9)
 
         # Must split settings into tempo, defense, three point settings
-        schedule.settings = kitchen.get_content(cells, 10)
-        schedule.tempo = kitchen.get_content(cells, 10)
-        schedule.defense = kitchen.get_content(cells, 10)
-        schedule.three_point_shooting = kitchen.get_content(cells, 10)
+        settings = kitchen.get_content(cells, 10)
+        settings_split = settings.split('/')
+        schedule.tempo = settings_split[0]
+        schedule.defense = settings_split[1]
+        schedule.three_point_shooting = settings_split[2]
         return schedule
 
 
 
-        
+
 # NOTE: STILL NEED TO UPDATE FUNCTIONS BELOW FOR SCHEDULE SCRAPER
 
     @staticmethod
