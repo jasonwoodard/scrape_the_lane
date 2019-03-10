@@ -2,7 +2,7 @@ import soup_kitchen as kitchen
 import schedule_object
 
 
-class TeamScheuleScraper:
+class TeamScheduleScraper:
     def __init__(self, schedule_page, team_id):
         self.schedule_page_soup = kitchen.get_soup(schedule_page)
         self.team_id = team_id
@@ -76,8 +76,38 @@ class TeamScheuleScraper:
         schedule.three_point_shooting = settings_split[2]
         return schedule
 
+    @staticmethod
+    def _get_win_loss_record(win_loss_value):
+        """
+        Takes win loss string in format 'a - b' or 'a - b (c - d)' and returns a 4 int|None tuple of the result.
+        :param win_loss_value: Raw string value from win loss column on schedule page
+        :return: 4 int|None tuple of wins, losses, ???, ???
+        """
+        # Assuming value values are 'a - b' or 'a - b (c - d)', rather than fight the format take steps to make it
+        # something we can work with.
+        # Steps:
+        # 1) replace the open paren if present with a '- ' (dash space).
+        # 2) remove the closing paren if present.
+        #
+        # If the input is 'a - b' all this has no effect. If the input is 'a - b (c - d)' the steps do the following
+        # Result #1) 'a - b (c - d)' => 'a - b - c - d)'
+        # Result #2) 'a - b - c - d)' => 'a - b - c - d'
+        # And now, we have an ordered list of values that easily split on ' - ' (dash space dash).
+        re_delimited = win_loss_value.replace('(', '- ').replace(')', '')
 
+        as_list = re_delimited.split(' - ')
 
+        # Here we use fancy python list comprehension to turn all the string values into ints: int('1') = 1
+        int_list = [int(i) for i in as_list]
+
+        # We're expecting a tuple length 4 as the output, in the case of 'a - b' input we're 2 short. So pad the end
+        # of the list with two 'None' values.
+        if len(int_list) == 2:
+            int_list.extend([None, None])
+
+        # Finally, convert the list to a tuple - could you use a list (array) instead, yeah you could but isn't it nice
+        # to stretch yourself and use some of the cooler parts of Python?
+        return tuple(int_list)
 
 # NOTE: STILL NEED TO UPDATE FUNCTIONS BELOW FOR SCHEDULE SCRAPER
 
