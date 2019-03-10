@@ -9,7 +9,7 @@ https://docs.python.org/3/library/unittest.html
 '''
 
 
-class TestStringMethods(unittest.TestCase):
+class TestTeamScheduleScraper(unittest.TestCase):
 
     # This is called before EVERY test below. So each time the test is using a fresh object that has no 'bleed' from
     # previous test runs.  This is key for classes that can maintain state within the instance, in this case that would
